@@ -20,3 +20,9 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# python manage.py runserver 0.0.0.0:8000
+# to run the server
+# http://localhost:8000/admin/smartstore/client/ admin page client table
+# user:manal password: admin

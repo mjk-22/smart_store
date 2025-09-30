@@ -11,7 +11,18 @@
         <br>
         <label for="lname">Last Name:</label>
         <input type="text" id="lname" name="lname">
+        <br>
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email">
+        <br>
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone">
+         <button type="submit" value="submit">Submit</button>
     </form>
-    <button type="submit" form="form1" value="submit">Submit</button>
+    {% if messages %}
+        {% for m in messages %}
+            <p>{{m}}</p>
+        {% endfor %}
+    {% endif %}
 </body>
 </html>
