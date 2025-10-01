@@ -28,4 +28,3 @@ time.sleep(1)
 GPIO.output(Buzzer, GPIO.LOW)
 
 GPIO.cleanup()
-
