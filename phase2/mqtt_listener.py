@@ -8,12 +8,14 @@ TOPIC2 = "frig2"
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
-        print("Connected")
+        print("Connected to {TOPIC}")
         client.subscribe(TOPIC1)
+        client.subscribe(TOPIC2)
     else:
-        print("Connection failed", rc)
+        print("Connection failed")
 
 def on_message(client, userdata, msg):
+    print(f"\nMessage received on topic {msg.topic}")
     try:
         payload = msg.payload.decode('utf-8')
         data = json.loads(payload)
@@ -22,6 +24,7 @@ def on_message(client, userdata, msg):
         humidity = data.get("humidity")
 
         print(f"Temperature: {temperature}°C | Humidity: {humidity}%")
+
 
     except json.JSONDecodeError:
         print("Received non-JSON message:", msg.payload)
