@@ -6,7 +6,7 @@
 #define DHTTYPE DHT11
 
 const char* ssid = "iotvanier";
-const char* password = "14730078";
+ const char* password = "14730078";
 
 const char* mqtt_server = "192.168.2.70";
 
