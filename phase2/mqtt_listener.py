@@ -8,9 +8,10 @@ TOPIC2 = "frig2"
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
-        print("Connected to {TOPIC}")
+        print(f"Connected to broker {BROKER}")
         client.subscribe(TOPIC1)
         client.subscribe(TOPIC2)
+        print(f"Subscribed to topic {TOPIC1}, {TOPIC2}")
     else:
         print("Connection failed")
 

@@ -25,7 +25,16 @@ SECRET_KEY = 'django-insecure-u^sd&l8pwgmysyt*ar3hdrk0p1%3#272sbn0ky1%2cy$h7%=i_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*",]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "http://raspberrypi.local:8000",
+    "http://192.168.2.40:8000",   # your Pi's LAN IP if you use it
+]
+
+
 
 
 # Application definition

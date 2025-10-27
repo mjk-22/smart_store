@@ -5,10 +5,21 @@
 #define DHTPIN 4
 #define DHTTYPE DHT11
 
-const char* ssid = "iotvanier";
-const char* password = "14730078";
+// const char* ssid = "iotvanier";
+// const char* password = "14730078";
 
-const char* mqtt_server = "192.168.2.70";
+const char* ssid = "SM-G781W9921";
+const char* password = "wyjn8694";
+
+// const char* ssid = "VIRGIN579";
+// const char* password = "E79412A3DE17";
+
+// const char* mqtt_server = "192.168.2.70";
+// const char* mqtt_server = "192.168.2.40";
+// const char* mqtt_server = "192.168.0.134";
+const char* mqtt_server = "10.142.122.212";
+
+
 
 DHT dht(DHTPIN, DHTTYPE);
 
