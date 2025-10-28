@@ -5,10 +5,10 @@
 #define DHTPIN 4
 #define DHTTYPE DHT11
 
-const char* ssid = "iotvanier";
-const char* password = "14730078";
+const char* ssid = "SM-G781W9921";
+const char* password = "wyjn8694";
 
-const char* mqtt_server = "192.168.2.70";
+const char* mqtt_server = "10.142.122.212";
 
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -92,16 +92,16 @@ void reconnect() {
   }
 }
 void loop() {
-  if (!client.connected()) {
-    reconnect();
-  }
   client.loop();
 
   long now = millis();
   if (now - lastMsg > 5000) {
     lastMsg = now;
-    
-    float t = dht.readTemperature();
+
+  client.connect("ESP8266Client");
+  client.subscribe("frig2");
+
+  float t = dht.readTemperature();
   float h = dht.readHumidity();
 
   if (isnan(t) || isnan(h)) {
