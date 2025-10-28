@@ -67,7 +67,7 @@ void callback(char* topic, byte* message, unsigned int length) {
   }
   Serial.println();
 
-  if (String(topic) == "frig1") {
+  if (String(topic) == "frig2") {
     Serial.print("Changing output to ");
     if(messageTemp == "on"){
       Serial.println("on");
@@ -85,7 +85,7 @@ void reconnect() {
     Serial.print("Attempting MQTT connection...");
     if (client.connect("ESP8266Client")) {
       Serial.println("connected");
-      client.subscribe("frig1");
+      client.subscribe("frig2");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -95,14 +95,14 @@ void reconnect() {
   }
 }
 void loop() {
-
   long now = millis();
   if (now - lastMsg > 5000) {
   lastMsg = now;
-  
+
   client.connect("ESP8266Client");
   Serial.println("connected");
   client.subscribe("frig2");
+
 
   float t = dht.readTemperature();
   float h = dht.readHumidity();
@@ -119,7 +119,7 @@ void loop() {
   char jsonBuffer[128];
   serializeJson(doc, jsonBuffer);
 
-  client.publish("frig1", jsonBuffer);
+  client.publish("frig2", jsonBuffer);
 
   Serial.print("Published: ");
   Serial.println(jsonBuffer);
