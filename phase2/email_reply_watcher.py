@@ -14,7 +14,7 @@ django.setup()
 
 from smartstore.models import Fridge
 
-GMAIL_ADDRESS = ""
+GMAIL_ADDRESS = "email that read reply"
 APP_PASSWORD  = ""
 
 BROKER = "localhost"

@@ -2,7 +2,7 @@
 import smtplib, imaplib, email, re, time
 from email.message import EmailMessage
 
-GMAIL_ADDRESS = ""
+GMAIL_ADDRESS = "email that read reply"
 APP_PASSWORD  = ""  
 
 def send_alert(to_addr, fridge_id, fridge_name, topic, temp):
@@ -17,8 +17,11 @@ def send_alert(to_addr, fridge_id, fridge_name, topic, temp):
     msg["To"]   = to_addr
     msg["Subject"] = subject
     msg.set_content(body)
-
-    with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
-        smtp.starttls()
-        smtp.login(GMAIL_ADDRESS, APP_PASSWORD)
-        smtp.send_message(msg)
+    try:
+        with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
+            smtp.starttls()
+            smtp.login(GMAIL_ADDRESS, APP_PASSWORD)
+            smtp.send_message(msg)
+            print(f"[email] sent to {to_addr}")
+    except Exception as e:
+        print("[email] Failed:", e)
