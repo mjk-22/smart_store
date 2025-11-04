@@ -3,7 +3,7 @@ import smtplib, imaplib, email, re, time
 from email.message import EmailMessage
 
 GMAIL_ADDRESS = "email that read reply"
-APP_PASSWORD  = ""  
+APP_PASSWORD  = "" 
 
 def send_alert(to_addr, fridge_id, fridge_name, topic, temp):
     subject = f"[ALERT] Fridge {fridge_name} (id={fridge_id}) @ {temp:.1f}°C"

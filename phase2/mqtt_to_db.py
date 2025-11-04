@@ -1,15 +1,9 @@
-# --- Django bootstrap (force the correct path) ---
 import os, sys, json, time
 from pathlib import Path
 import paho.mqtt.client as mqtt
 
-# project root: .../smart_store
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-
-# put the *inner* phase1 (the one that contains settings.py) first on sys.path
 sys.path.insert(0, str((PROJECT_ROOT / "phase1").resolve()))
-
-# now phase1.settings will resolve to the right module
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "phase1.settings")
 
 import django
@@ -19,7 +13,6 @@ from smartstore.models import Fridge
 from django.utils import timezone
 from email_alerts import send_alert
 
-# ---- MQTT bits (unchanged) ----
 BROKER = "localhost"
 PORT = 1883
 TOPICS = ["frig1", "frig2"]

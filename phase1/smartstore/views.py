@@ -49,8 +49,8 @@ def dashboard(request):
         )
     )
     return render(request, "smartstore/dashboard.html", {
-        "fridges": fridges,              # for the HTML cards
-        "fridges_data": fridges_data,    # for JS (pure JSON)
+        "fridges": fridges,              
+        "fridges_data": fridges_data,    
     })
 
 
@@ -86,14 +86,14 @@ def update_thresholds(request, pk):
 @require_POST
 def fan_toggle(request, pk):
     f = get_object_or_404(Fridge, pk=pk)
-    action = (request.POST.get("action") or "").upper()  # "ON" or "OFF"
+    action = (request.POST.get("action") or "").upper() 
     want_on = (action == "ON")
     # update DB
     f.fan_on = want_on
     f.save(update_fields=["fan_on"])
     messages.success(request, f"Fan for {f.name} set to {action}.")
 
-    # OPTIONAL: publish an MQTT command so fan_control.py acts
+    # publish an MQTT command so fan_control.py acts
     try:
         import paho.mqtt.publish as publish
         publish.single(f"fan/{f.topic}/cmd", action, hostname="localhost", port=1883)

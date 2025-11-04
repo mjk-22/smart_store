@@ -8,10 +8,15 @@
 const char* ssid = "SM-G781W9921";
 const char* password = "wyjn8694";
 
+<<<<<<< HEAD
 const char* mqtt_server = "10.142.122.153";
 // const char* mqtt_server = "192.168.2.40";
 // const char* mqtt_server = "192.168.0.134";
 // const char* mqtt_server = "10.142.122.212";
+=======
+const char* mqtt_server = "192.168.0.134";
+
+>>>>>>> 35caeed174d51c654adb1cde6058aa532bff8bd0
 
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -95,6 +100,7 @@ void reconnect() {
   }
 }
 void loop() {
+<<<<<<< HEAD
 
   long now = millis();
   if (now - lastMsg > 5000) {
@@ -105,6 +111,19 @@ void loop() {
   client.subscribe("frig1");
 
   float t = dht.readTemperature();
+=======
+  
+
+  long now = millis();
+  if (now - lastMsg > 5000) {
+    lastMsg = now;
+
+    client.connect("ESP8266Client");
+      Serial.println("connected");
+      client.subscribe("frig1");
+    
+    float t = dht.readTemperature();
+>>>>>>> 35caeed174d51c654adb1cde6058aa532bff8bd0
   float h = dht.readHumidity();
 
   if (isnan(t) || isnan(h)) {

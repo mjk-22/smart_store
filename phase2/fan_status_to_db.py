@@ -1,4 +1,3 @@
-# phase2/fan_status_to_db.py
 import django, os, sys
 from pathlib import Path
 import paho.mqtt.client as mqtt
@@ -13,7 +12,6 @@ from smartstore.models import Fridge
 BROKER="localhost"; PORT=1883
 
 def on_message(c,u,msg):
-    # topic = fan/<topic>/status
     topic = msg.topic.split("/")[1]
     state = msg.payload.decode().strip().upper() == "ON"
     try:
