@@ -102,7 +102,7 @@ void loop() {
   
   client.connect("ESP8266Client");
   Serial.println("connected");
-  client.subscribe("frig2");
+  client.subscribe("frig1");
 
   float t = dht.readTemperature();
   float h = dht.readHumidity();
