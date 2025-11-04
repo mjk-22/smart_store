@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <title>Smart Store – Fridge Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Chart.js (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
   <style>
     body { font-family: system-ui, Arial, sans-serif; margin: 20px; }
@@ -23,7 +22,6 @@
 <body>
   <h1>Smart Store – Fridge Dashboard</h1>
 
-  <!-- messages -->
   {% if messages %}
     {% for m in messages %}
       <div class="msg">{{ m }}</div>
@@ -75,7 +73,6 @@
   </div>
 {{ fridges_data|json_script:"fridges-data" }}
 <script>
-  // dump JSON for JS to read safely
   const INITIAL = JSON.parse(document.getElementById("fridges-data").textContent);
 
   function makeGauge(ctx, max, initial) {
@@ -88,7 +85,6 @@
     });
   }
 
-  // Build gauges using the JSON data (no Django tags here)
   const gauges = {}; // {id: {temp, hum, maxT, maxH}}
   for (const f of INITIAL) {
     const tctx = document.getElementById(`tempGauge-${f.id}`).getContext('2d');

@@ -8,10 +8,6 @@ from email.mime.multipart import MIMEMultipart
 from gpiozero import Motor
 import paho.mqtt.client as mqtt
 
-# ======================================================
-# CONFIGURATION
-# ======================================================
-
 # MQTT
 MQTT_BROKER = "localhost"
 MQTT_PORT = 1883
@@ -19,7 +15,7 @@ TOPICS_SENSOR = ["Frig1", "Frig2"]
 TOPIC_FAN_CONTROL = "FanControl1"
 TOPIC_FAN_STATUS = "FanStatus1"
 
-# Temperature thresholds (can come from DB in phase 3)
+# Temperature thresholds 
 THRESHOLDS = {
     "Frig1": 10,  # °C
     "Frig2": 12
@@ -40,9 +36,7 @@ fan = Motor(forward=MOTOR_PIN_FORWARD, backward=MOTOR_PIN_BACKWARD)
 last_alert_time = {"Frig1": 0, "Frig2": 0}
 alert_cooldown = 60  # seconds before sending another alert
 
-# ======================================================
 # EMAIL FUNCTIONS
-# ======================================================
 def send_email(fridge, temperature):
     subject = f"⚠️ Temperature Alert - {fridge}"
     body = f"""

@@ -1,4 +1,3 @@
-# phase2/fan_control.py
 import os
 import time
 import json
@@ -7,14 +6,13 @@ import paho.mqtt.client as mqtt
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 
-# from gpiozero import OutputDevice
 
 BROKER = "localhost"
 PORT   = 1883
-FAN_PINS = {}   # topic -> BCM pin
+FAN_PINS = {}  
 
-# Load pins from a tiny json (or hardcode):
-# Example content: {"frig1":18, "frig2":23}
+# Load pins from json 
+# json content: {"frig1":18, "frig2":23}
 PINMAP_FILE = os.path.join(os.path.dirname(__file__), "fan_pins.json")
 if os.path.exists(PINMAP_FILE):
     FAN_PINS = json.load(open(PINMAP_FILE))
@@ -34,7 +32,7 @@ def on_connect(c, u, f, rc):
         c.subscribe(f"fan/{topic}/cmd")
 
 def on_message(c, u, msg):
-    topic = msg.topic.split("/")[1]  # fan/<topic>/cmd
+    topic = msg.topic.split("/")[1] 
     cmd = msg.payload.decode().strip().upper()
     if cmd in ("ON","OFF"):
         set_pin(topic, cmd=="ON")

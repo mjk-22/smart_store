@@ -8,12 +8,7 @@
 const char* ssid = "iotvanier";
 const char* password = "14730078";
 
-// const char* mqtt_server = "192.168.2.70";
-// const char* mqtt_server = "192.168.2.40";
-// const char* mqtt_server = "192.168.0.134";
-// const char* mqtt_server = "10.142.122.212";
-
-
+const char* mqtt_server = "192.168.0.134";
 
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -97,15 +92,15 @@ void reconnect() {
   }
 }
 void loop() {
-  if (!client.connected()) {
-    reconnect();
-  }
-  client.loop();
+  
 
   long now = millis();
   if (now - lastMsg > 5000) {
     lastMsg = now;
     
+    client.connect("ESP8266Client");
+      Serial.println("connected");
+      client.subscribe("frig2");
     float t = dht.readTemperature();
   float h = dht.readHumidity();
 
