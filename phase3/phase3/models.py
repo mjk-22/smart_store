@@ -5,13 +5,13 @@ import uuid
 class Customers(models.Model):
     name = models.CharField(max_length=100)
     email = models.CharField(max_length=100, unique=True)
-    phone_number = models.CharField(unique=True, max_length=15, blank=True, validators=[RegexValidator(regex=r'^\d{9,15}$', message="Invalid phone number format")])
+    phone_number = models.CharField(unique=True, max_length=15, blank=True, validators=[RegexValidator(regex=r'^\d{9,15}$')])
     password = models.CharField(null=False)
     membership_id = models.UUIDField(default=uuid.uuid1, editable=False)
     points = models.PositiveIntegerField(default=0, null=False) 
 
 class Receipts(models.Model):
-    customer_id = models.ForeignKey(Customers, on_delete=models.DO_NOTHING)
+    customer_id = models.ForeignKey(Customers, on_delete=models.CASCADE)
     time = models.DateTimeField()
     points_earned = models.IntegerField(default=0)
     total_price = models.IntegerField()
@@ -28,8 +28,8 @@ class Products(models.Model):
     expiry_date = models.DateField()
 
 class Receipts_Products(models.Model):
-    receipt_id = models.ForeignKey(Receipts, on_delete=models.DO_NOTHING)
-    product_id = models.ForeignKey(Products, on_delete=models.DO_NOTHING)
+    receipt_id = models.ForeignKey(Receipts, on_delete=models.CASCADE)
+    product_id = models.ForeignKey(Products, on_delete=models.CASCADE)
     product_quantity = models.IntegerField()
 
     class Meta:
@@ -37,6 +37,6 @@ class Receipts_Products(models.Model):
         db_table = 'receipts_products'
 
 class InventoryReceived(models.Model):
-    product_id = models.ForeignKey(Products, on_delete=models.DO_NOTHING)
+    product_id = models.ForeignKey(Products, on_delete=models.CASCADE)
     date_received = models.DateField()
     quantity_received = models.IntegerField()

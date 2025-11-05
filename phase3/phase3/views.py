@@ -20,10 +20,18 @@ def default(request):
             if customer_form.is_valid():
                 customer_form.save()
             return redirect("default")
+        elif ("delete_customer" in request.POST):
+            customer_id = request.POST.get("delete_customer")
+            Customers.objects.filter(id=customer_id).delete()
+            return redirect("default")
         elif ("create_product" in request.POST):
             product_form = ProductForm(request.POST)
             if product_form.is_valid():
                 product_form.save()
+            return redirect("default")
+        elif ("delete_product" in request.POST):
+            product_id = request.POST.get("delete_product")
+            Products.objects.filter(id=product_id).delete()
             return redirect("default")
         elif ("add_inventory" in request.POST):
             inventory_form = InventoryForm(request.POST)
