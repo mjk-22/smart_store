@@ -1,13 +1,14 @@
 from django.db import models
 from django.core.validators import *
+from phone_field import *
 
 class Customers(models.Model):
     name = models.CharField(max_length=100)
     email = models.CharField(max_length=100, unique=True)
-    phone_number = models.PositiveIntegerField(max_length=10, unique=True)
+    phone_number = PhoneFormField()
     password = models.CharField(null=False)
     membership_id = models.CharField(max_length=255, unique=True)
-    points = models.PositiveIntegerField(default=0, null=False)  
+    points = models.PositiveIntegerField(default=0, null=False) 
 
 class Receipts(models.Model):
     customer_id = models.ForeignKey(Customers, on_delete=models.DO_NOTHING)
