@@ -9,7 +9,7 @@ class CustomerForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Products
-        fields = ['name', 'category', 'price', 'epc', 'upc', 'producer_company']
+        fields = ['name', 'category', 'price', 'epc', 'upc', 'producer_company', 'expiry_date']
 
 class InventoryForm(forms.ModelForm):
     class Meta:

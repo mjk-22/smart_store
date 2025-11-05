@@ -19,19 +19,19 @@ def default(request):
             customer_form = CustomerForm(request.POST)
             if customer_form.is_valid():
                 customer_form.save()
-                return redirect("default")
+            return redirect("default")
         elif ("create_product" in request.POST):
             product_form = ProductForm(request.POST)
             if product_form.is_valid():
                 product_form.save()
-                return redirect("default")
+            return redirect("default")
         elif ("add_inventory" in request.POST):
             inventory_form = InventoryForm(request.POST)
             if inventory_form.is_valid():
                 inventory = inventory_form.save()
-                inventory.product.stock_quantity += inventory.quantity_received
-                inventory.product.save()
-                return redirect("default")
+                inventory.product_id.stock_quantity += inventory.quantity_received
+                inventory.product_id.save()
+            return redirect("default")
         elif ("checkout" in request.POST):
             return redirect("default")
         else:
