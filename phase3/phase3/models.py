@@ -1,12 +1,13 @@
 from django.db import models
 from django.core.validators import *
+import uuid
 
 class Customers(models.Model):
     name = models.CharField(max_length=100)
     email = models.CharField(max_length=100, unique=True)
     phone_number = models.CharField(unique=True, max_length=15, blank=True, validators=[RegexValidator(regex=r'^\d{9,15}$', message="Invalid phone number format")])
     password = models.CharField(null=False)
-    membership_id = models.CharField(max_length=255, unique=True)
+    membership_id = models.UUIDField(default=uuid.uuid1, editable=False)
     points = models.PositiveIntegerField(default=0, null=False) 
 
 class Receipts(models.Model):
@@ -23,7 +24,7 @@ class Products(models.Model):
     upc = models.CharField(max_length=50, unique=True)
     producer_company = models.CharField(max_length=100)
     image_url = models.CharField()
-    stock_quantity = models.IntegerField()
+    stock_quantity = models.IntegerField(default=0)
     expiry_date = models.DateField()
 
 class Receipts_Products(models.Model):
