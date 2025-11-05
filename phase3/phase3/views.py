@@ -47,9 +47,44 @@ def default(request):
                 data = json.loads(request.body.decode("utf-8"))
                 if (data.get("action") == "checkout"):
                     cart = data.get("cart", {})
+                    print(cart)
+
+                    # Since everything is done on the dashboard, I haven't implemented a login
+                    # feature yet, so there isn't a customer ID that gets passed through yet
+                    #
+                    # customer_id = data.get("customer_id")
+                    # customer = Customers.objects.get(id=customer_id)
+                    customer = Customers.objects.get(id=1)
+                    total_price = 0
+
+                    with transaction.atomic():
+                        for product_id, item_data in cart.items():
+                            quantity = item_data["quantity"]
+                            product= Products.objects.get(id=product_id)
+                            product.stock_quantity -= quantity
+                            product.save()
+                            total_price += product.price * quantity
+                        
+                        receipt = Receipts.objects.create(
+                            customer_id = customer,
+                            time=timezone.now(),
+                            points_earned = int(total_price // 10),
+                            total_price=total_price
+                        )
+
+                        for product_id, item_data in cart.items():
+                            item_quantity = item_data["quantity"]
+                            item_product = Products.objects.get(id=product_id)
+                            Receipts_Products.objects.create(
+                                receipt_id = receipt,
+                                product_id = item_product,
+                                product_quantity = item_quantity
+                            )
+
+
                     return JsonResponse({"success": True, "redirect_url": "/"})
             except Exception as e:
-                print("error")
+                return JsonResponse({"success": False, "redirect_url": "/"})                 
         else:
             return redirect("default")
 
