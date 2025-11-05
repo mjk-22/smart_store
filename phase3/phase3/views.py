@@ -3,6 +3,8 @@ from .models import Customers, Products, InventoryReceived, Receipts, Receipts_P
 from .forms import CustomerForm, ProductForm, InventoryForm
 from django.db import transaction
 from django.utils import timezone
+from django.http import JsonResponse
+import json
 
 
 def default(request):
@@ -40,10 +42,16 @@ def default(request):
                 inventory.product_id.stock_quantity += inventory.quantity_received
                 inventory.product_id.save()
             return redirect("default")
-        elif ("checkout" in request.POST):
-            return redirect("default")
+        elif (request.headers.get("Content-Type") == "application/json"):
+            try:
+                data = json.loads(request.body.decode("utf-8"))
+                if (data.get("action") == "checkout"):
+                    cart = data.get("cart", {})
+                    return JsonResponse({"success": True, "redirect_url": "/"})
+            except Exception as e:
+                print("error")
         else:
-            return redirect("default")  
+            return redirect("default")
 
     context = {
         'customer_form': customer_form,
