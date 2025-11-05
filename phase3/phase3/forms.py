@@ -14,4 +14,4 @@ class ProductForm(forms.ModelForm):
 class InventoryForm(forms.ModelForm):
     class Meta:
         model = InventoryReceived
-        fields = ['product', 'date_received', 'quantity_received']
+        fields = ['product_id', 'date_received', 'quantity_received']

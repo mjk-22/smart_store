@@ -6,36 +6,36 @@ from django.utils import timezone
 
 
 def default(request):
+    customer_form = CustomerForm()
+    product_form = ProductForm()
+    inventory_form = InventoryForm()
+    customers = Customers.objects.all()
+    products = Products.objects.all()
+    receipts = Receipts.objects.all()
+    inventory = InventoryReceived.objects.all()
+
     if (request.method == "POST"):
         if ("create_customer" in request.POST):
             customer_form = CustomerForm(request.POST)
             if customer_form.is_valid():
                 customer_form.save()
-                return redirect("")
+                return redirect("default")
         elif ("create_product" in request.POST):
             product_form = ProductForm(request.POST)
             if product_form.is_valid():
                 product_form.save()
-                return redirect("")
+                return redirect("default")
         elif ("add_inventory" in request.POST):
             inventory_form = InventoryForm(request.POST)
             if inventory_form.is_valid():
                 inventory = inventory_form.save()
                 inventory.product.stock_quantity += inventory.quantity_received
                 inventory.product.save()
-                return redirect("")
+                return redirect("default")
         elif ("checkout" in request.POST):
-            return redirect("")
-        
-    else:
-        customer_form = CustomerForm()
-        product_form = ProductForm()
-        inventory_form = InventoryForm()
-
-    customers = Customers.objects.all()
-    products = Products.objects.all()
-    receipts = Receipts.objects.all()
-    inventory = InventoryReceived.objects.all()
+            return redirect("default")
+        else:
+            return redirect("default")  
 
     context = {
         'customer_form': customer_form,
@@ -48,4 +48,4 @@ def default(request):
     }
 
     if (request.method == "GET"):
-        return render(request, "index.html")
+        return render(request, "index.html", context=context)

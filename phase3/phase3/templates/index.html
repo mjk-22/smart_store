@@ -6,12 +6,66 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'css/main.css' %}"> -->
     <script src='js/main.js'></script>
 </head>
 <body>
-    <div id="testDiv", class="testDiv">
-        <p>Hello world</p>
-    </div>
+    <h1>Smart Store Dashboard</h1>
+
+<h2>Create Customer</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ customer_form.as_p }}
+    <button type="submit" name="create_customer">Add Customer</button>
+</form>
+
+<h2>Create Product</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ product_form.as_p }}
+    <button type="submit" name="create_product">Add Product</button>
+</form>
+
+<h2>Add Inventory</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ inventory_form.as_p }}
+    <button type="submit" name="add_inventory">Add Inventory</button>
+</form>
+
+<hr>
+
+<h2>Customers</h2>
+<table>
+<tr><th>Name</th><th>Email</th><th>Points</th></tr>
+{% for c in customers %}
+<tr><td>{{ c.name }}</td><td>{{ c.email }}</td><td>{{ c.points }}</td></tr>
+{% endfor %}
+</table>
+
+<h2>Products</h2>
+<table>
+<tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th></tr>
+{% for p in products %}
+<tr><td>{{ p.name }}</td><td>{{ p.category }}</td><td>{{ p.price }}</td><td>{{ p.stock_quantity }}</td></tr>
+{% endfor %}
+</table>
+
+<h2>Inventory</h2>
+<table>
+<tr><th>Product</th><th>Date Received</th><th>Qty</th></tr>
+{% for i in inventory %}
+<tr><td>{{ i.product.name }}</td><td>{{ i.date_received }}</td><td>{{ i.quantity_received }}</td></tr>
+{% endfor %}
+</table>
+
+<h2>Receipts</h2>
+<table>
+<tr><th>ID</th><th>Customer</th><th>Total</th><th>Points Earned</th><th>Date</th></tr>
+{% for r in receipts %}
+<tr><td>{{ r.id }}</td><td>{{ r.customer.name }}</td><td>{{ r.total_price }}</td><td>{{ r.points_earned }}</td><td>{{ r.time }}</td></tr>
+{% endfor %}
+</table>
+
 </body>
 </html>

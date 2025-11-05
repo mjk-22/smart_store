@@ -39,4 +39,4 @@ class Receipts_Products(models.Model):
 class InventoryReceived(models.Model):
     product_id = models.ForeignKey(Products, on_delete=models.DO_NOTHING)
     date_received = models.DateField()
-    quantity_received = models.IntegerField
+    quantity_received = models.IntegerField()
