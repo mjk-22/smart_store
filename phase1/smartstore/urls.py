@@ -10,4 +10,5 @@ urlpatterns = [
     path("fridge/<int:pk>/thresholds/", views.update_thresholds, name="update_thresholds"),
     path("store/", views.store_view, name="store"),  # client form
     # path("fridge/<int:pk>/fan/", views.fan_toggle, name="fan_toggle"),
+    path("testing", views.testing, name="default"),
 ]
