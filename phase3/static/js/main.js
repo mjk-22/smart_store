@@ -1,6 +1,10 @@
 let cart = {};
 const cartTable = document.getElementById("cart-table");
-
+const serialButton = document.getElementById("serial-button");
+var port;
+var buffy = new ArrayBuffer(1);
+var writer;
+buffy[0]=10;
 
 function renderCart() {
     cartTable.innerHTML = `
@@ -92,3 +96,28 @@ function getCSRFToken() {
     }
     return "";
 }
+
+const connectSerialPort = async function () {
+    const requestOptions = {
+      // Filter on devices with the Arduino USB vendor ID.
+      //filters: [{ vendorId: 0x2341 }],
+    };
+
+    // Request an Arduino from the user.
+    port = await navigator.serial.requestPort(requestOptions);
+
+    // Open and begin reading.
+    await port.open({ baudrate: 9600 });
+    //const reader = port.in.getReader();
+    const reader = port.readable.getReader();
+    writer = port.writable.getWriter();
+    //const writer = port.writable.getWriter();
+    //writer.write(buffy);
+    while (true) {
+      const {value, done} = await reader.read();
+      if (done) break;
+      console.log(data);
+    }
+} // end of function
+
+serialButton.onclick = connectSerialPort();

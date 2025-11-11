@@ -14,6 +14,9 @@ from .models import Fridge
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
+import serial
+from serial.tools import list_ports
+import time
 
 def testing(request):
     customer_form = CustomerForm()
@@ -23,6 +26,37 @@ def testing(request):
     products = Products.objects.all()
     receipts = Receipts.objects.all()
     inventory = InventoryReceived.objects.all()
+
+    # ports = list_ports.comports()
+    # for port in ports:
+    #     print(f"Device: {port.device}, Description: {port.description}, HWID: {port.hwid}")
+    
+    # try:
+    #     ser = serial.Serial("/dev/ttyAMA10", 9600, timeout=1)
+    #     print(f"Connected to {'/dev/ttyAMA10'}")
+
+    #     while True:
+    #         # Read data from the serial port
+    #         serial_data = ser.readline()
+    #         if serial_data:
+    #             try:
+    #                 tag_id = serial_data.decode('utf-8').strip()
+    #                 if tag_id:
+    #                     print(f"Tag ID: {tag_id}")
+    #             except UnicodeDecodeError:
+    #                 print("Could not decode data to UTF-8")
+    #         time.sleep(0.1)
+    # except serial.SerialException as e:
+    #     print(f"Serial port error: {e}")
+    # except KeyboardInterrupt:
+    #     print("Exiting Program")
+    # except Exception as e:
+    #     print(f"An error occurred: {e}")
+    # finally:
+    #     if 'ser' in locals() and ser.is_open:
+    #         ser.close()
+    #         print("Serial port closed.")
+
 
     if (request.method == "POST"):
         if ("create_customer" in request.POST):
