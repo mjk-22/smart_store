@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Store</title>
+</head>
+<body>
+    <nav>
+        <a href="/">Dashboard</a>
+        <a href="/store">phase 1 store</a>
+        <a href="/testing">phase 3 store</a>
+    </nav>
+
+    <form id="form1" method="post">
+        {% csrf_token %}
+        <label for="fname">First Name:</label>
+        <input type="text" id="fname" name="fname">
+        <br>
+        <label for="lname">Last Name:</label>
+        <input type="text" id="lname" name="lname">
+        <br>
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email">
+        <br>
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone">
+         <button type="submit" value="submit">Submit</button>
+    </form>
+    {% if messages %}
+        {% for m in messages %}
+            <p>{{m}}</p>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

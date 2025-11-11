@@ -19,6 +19,12 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.default, name="default"),
+    path('testing', views.testing, name="testing"),
     path('admin/', admin.site.urls),
+
+    path("", views.dashboard, name="dashboard"),  # homepage
+    path("api/fridges/latest/", views.api_latest_readings, name="api_latest_readings"),
+    path("fridge/<int:pk>/thresholds/", views.update_thresholds, name="update_thresholds"),
+    path("store/", views.store_view, name="store"),  # client form
+    # path("fridge/<int:pk>/fan/", views.fan_toggle, name="fan_toggle"),
 ]
