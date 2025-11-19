@@ -37,9 +37,13 @@ function renderCart() {
     }
 }
 
-function addToCart(productID, name, price, stock) {
+function addToCart(product) {
+    const productID = product.id;
     if (!cart[productID] && stock > 0) {
-        cart[productID] = {name, price, quantity: 1};
+        cart[productID] = {name: product.name,
+            price: product.price,
+            quantity: 1,
+            stock: product.stock};
     } else {
         if (cart[productID].quantity != stock) {
         cart[productID].quantity += 1;
@@ -47,6 +51,31 @@ function addToCart(productID, name, price, stock) {
     }
     renderCart();
 }
+
+function searchEPC() {
+    const epc = document.getElementById("code_search").value;
+
+    fetch("", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken()
+        },
+        body: JSON.stringify({
+            action: "epc_search",
+            epc: epc
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            addToCart(data);
+        } else {
+            alert("Product not found");
+        }
+    });
+}
+
 
 function removeFromCart(productID) {
     if (cart[productID]) {

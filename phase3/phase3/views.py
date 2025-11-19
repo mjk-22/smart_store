@@ -45,6 +45,19 @@ def default(request):
         elif (request.headers.get("Content-Type") == "application/json"):
             try:
                 data = json.loads(request.body.decode("utf-8"))
+                if data.get("action") == "epc_search":
+                    epc = data.get("epc")
+                    try:
+                        product = Products.objects.get(epc=epc)
+                        return JsonResponse({
+                            "success": True,
+                            "id": product.id,
+                            "name": product.name,
+                            "price": float(product.price),
+                            "stock": product.stock_quantity
+                    })
+                    except Products.DoesNotExist:
+                        return JsonResponse({"success": False, "error": "Product not found"})
                 if (data.get("action") == "checkout"):
                     cart = data.get("cart", {})
                     print(cart)

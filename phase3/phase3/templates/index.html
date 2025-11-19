@@ -65,6 +65,7 @@
         <th>Category</th>
         <th>Price</th>
         <th>Stock</th>
+        <th>EPC</th>
     </tr>
     {% for p in products %}
     <tr>
@@ -72,6 +73,7 @@
         <td>{{ p.category }}</td>
         <td>{{ p.price }}</td>
         <td>{{ p.stock_quantity }}</td>
+        <td>{{ p.epc }}</td>
         <td>
             <button onclick="addToCart('{{ p.id }}', '{{ p.name }}', '{{ p.price }}', '{{ p.stock_quantity }}')">
                 ADD TO CART
@@ -87,6 +89,13 @@
         </td>
     </tr>
     {% endfor %}
+    <form>
+    {% csrf_token %} 
+        <input type="text" id="code_search">
+        <button type="button" onclick="searchEPC()">
+        ADD TO CART
+        </button>
+    </form>
     </table>
 
     <h2>Inventory</h2>
