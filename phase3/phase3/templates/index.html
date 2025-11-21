@@ -4,34 +4,57 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
+    <title>Smart Store</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body>
-    <h1>Smart Store Dashboard</h1>
+ <header class="top-bar">
+        <h1>Smart Store Dashboard</h1>
 
+        <nav class="main-nav">
+                <a href="{% url 'default' %}">Dashboard</a>
+            <a href="{% url 'create_customer_page' %}">Create Customer</a>
+            <a href="{% url 'create_product_page' %}">Create Product</a>
+            <a href="{% url 'add_inventory_page' %}">Add Inventory</a>
+            <a href="{% url 'customers_page' %}">Customers</a>
+            <a href="{% url 'products_page' %}">Products</a>
+            <a href="{% url 'inventory_page' %}">Inventory</a>
+            <a href="{% url 'receipts_page' %}">Receipts</a>
+        </nav>
+    </header>
+
+    <main class="content">
+        <section id="create-customer" class="card">
     <h2>Create Customer</h2>
-    <form method="POST">
+    <form method="POST" class="customercr">
         {% csrf_token %}
         {{ customer_form.as_p }}
         <button type="submit" name="create_customer">Add Customer</button>
     </form>
+    </section>
 
+    <section id="create-product" class="card">
+ <hr>
     <h2>Create Product</h2>
     <form method="POST">
         {% csrf_token %}
         {{ product_form.as_p }}
         <button type="submit" name="create_product">Add Product</button>
     </form>
+     </section>
 
+    <section id="add-inventory" class="card">
+ <hr>
     <h2>Add Inventory</h2>
     <form method="POST">
         {% csrf_token %}
         {{ inventory_form.as_p }}
         <button type="submit" name="add_inventory">Add Inventory</button>
     </form>
+   </section>
 
+    <section id="customers" class="card">
     <hr>
 
     <h2>Customers</h2>
@@ -57,7 +80,10 @@
     </tr>
     {% endfor %}
     </table>
+    </section>
 
+    <section id="products" class="card">
+ <hr>
     <h2>Products</h2>
     <table>
     <tr>
@@ -88,7 +114,10 @@
     </tr>
     {% endfor %}
     </table>
+      </section>
 
+    <section id="inventory" class="card">
+ <hr>
     <h2>Inventory</h2>
     <table>
     <tr>
@@ -104,7 +133,10 @@
     </tr>
     {% endfor %}
     </table>
+     </section>
 
+    <section id="receipts" class="card">
+ <hr>
     <h2>Receipts</h2>
     <table>
     <tr>
@@ -124,7 +156,10 @@
     </tr>
     {% endfor %}
     </table>
+     </section>
 
+    <section id="cart" class="card">
+ <hr>
     <h2>Cart</h2>
     <table id="cart-table">
         <tr>
@@ -133,6 +168,9 @@
             <th>Price</th>
         </tr>
     </table>
+    </section>
+
+    </main>
     <script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>

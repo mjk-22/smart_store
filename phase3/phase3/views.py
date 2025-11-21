@@ -97,6 +97,135 @@ def default(request):
         'receipts': receipts,
         'inventory': inventory,
     }
+    
 
     if (request.method == "GET"):
         return render(request, "index.html", context=context)
+    
+
+def create_customer_page(request):
+    if request.method == "POST":
+        form = CustomerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("create_customer_page")
+    else:
+        form = CustomerForm()
+
+    context = {"form": form}
+    return render(request, "create_customer.html", context)
+
+
+def create_product_page(request):
+    if request.method == "POST":
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("create_product_page")
+    else:
+        form = ProductForm()
+
+    context = {"form": form}
+    return render(request, "create_product.html", context)
+
+
+def add_inventory_page(request):
+    if request.method == "POST":
+        form = InventoryForm(request.POST)
+        if form.is_valid():
+            inventory = form.save(commit=False)
+            product = inventory.product_id        
+            product.stock_quantity += inventory.quantity_received
+            product.save()
+            inventory.save()
+            return redirect("add_inventory_page")
+    else:
+        form = InventoryForm()
+
+    context = {"form": form}
+    return render(request, "add_inventory.html", context)
+
+def customers_page(request):
+    if request.method == "POST" and "delete_customer" in request.POST:
+        customer_id = request.POST.get("delete_customer")
+        Customers.objects.filter(id=customer_id).delete()
+        return redirect("customers_page")
+
+    customers = Customers.objects.all()
+    context = {"customers": customers}
+    return render(request, "customers.html", context)
+
+
+def products_page(request):
+    if request.method == "POST" and "delete_product" in request.POST:
+        product_id = request.POST.get("delete_product")
+        Products.objects.filter(id=product_id).delete()
+        return redirect("products_page")
+
+    products = Products.objects.all()
+    context = {"products": products}
+    return render(request, "products.html", context)
+
+
+def inventory_page(request):
+    inventory = InventoryReceived.objects.all()
+    context = {"inventory": inventory}
+    return render(request, "inventory.html", context)
+
+
+def receipts_page(request):
+    receipts = Receipts.objects.all()
+    context = {"receipts": receipts}
+    return render(request, "receipts.html", context)
+
+def checkout(request):
+    if request.method != "POST" or request.headers.get("Content-Type") != "application/json":
+        return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
+
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+        if data.get("action") != "checkout":
+            return JsonResponse({"success": False, "error": "Unsupported action"}, status=400)
+
+        cart = data.get("cart", {})
+        if not cart:
+            return JsonResponse({"success": False, "error": "Cart is empty"}, status=400)
+
+        # TODO: get the real logged-in customer
+        customer = Customers.objects.get(id=1)
+
+        total_price = 0
+
+        with transaction.atomic():
+            #update products and does total
+            for product_id, item in cart.items():
+                product = Products.objects.get(id=product_id)
+                quantity = int(item["quantity"])
+
+                product.stock_quantity -= quantity
+                product.save()
+
+                total_price += float(product.price) * quantity
+
+            #create receipt
+            receipt = Receipts.objects.create(
+                customer_id=customer,
+                time=timezone.now(),
+                points_earned=int(total_price // 10), 
+                total_price=total_price,
+            )
+
+            for product_id, item in cart.items():
+                product = Products.objects.get(id=product_id)
+                quantity = int(item["quantity"])
+                Receipts_Products.objects.create(
+                    receipt_id=receipt,
+                    product_id=product,
+                    product_quantity=quantity,
+                )
+
+        return JsonResponse({"success": True, "redirect_url": "/receipts/"})
+    except Exception as e:
+        print("Checkout error:", e)
+        return JsonResponse({"success": False, "error": "Checkout failed"}, status=500)
+

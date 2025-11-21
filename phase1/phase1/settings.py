@@ -31,7 +31,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "http://raspberrypi.local:8000",
-    "http://192.168.2.40:8000",   # your Pi's LAN IP if you use it
+    "http://192.168.0.134:8000",   # your Pi's LAN IP if you use it
 ]
 
 
@@ -114,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Montreal'
 
 USE_I18N = True
 

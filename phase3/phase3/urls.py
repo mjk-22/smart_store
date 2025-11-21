@@ -19,6 +19,16 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.default, name="default"),
+    path('', views.default, name='default'),
     path('admin/', admin.site.urls),
+#  path('', views.fridge_dashboard, name='default'),   
+    path('products/', views.products_page, name='products_page'),
+    path('checkout/', views.checkout, name='checkout_api'),
+
+    path('customers/create/', views.create_customer_page, name='create_customer_page'),
+    path('products/create/', views.create_product_page, name='create_product_page'),
+    path('inventory/add/', views.add_inventory_page, name='add_inventory_page'),
+    path('customers/', views.customers_page, name='customers_page'),
+    path('inventory/', views.inventory_page, name='inventory_page'),
+    path('receipts/', views.receipts_page, name='receipts_page'),
 ]
