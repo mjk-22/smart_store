@@ -3,23 +3,15 @@
 {% block content %}
 <section class="card">
     <h2>Products</h2>
-
-      <div class="scan-bar">
-        <form id="scan-form" onsubmit="handleScan(event)">
-            <label for="scan-code">Scan barcode / RFID:</label>
-            <input id="scan-code" type="text" autocomplete="off" autofocus>
-            <button type="submit">Add</button>
-        </form>
-    </div>
     
     <table>
         <tr>
             <th>Name</th>
             <th>Category</th>
             <th>Price</th>
+            <th>UPC</th>
+            <th>EPC</th>
             <th>Stock</th>
-            <th></th>
-            <th></th>
         </tr>
         {% for p in products %}
         <tr data-product-id="{{ p.id }}" data-name="{{ p.name }}" data-price="{{ p.price }}"
@@ -28,6 +20,8 @@
             <td>{{ p.name }}</td>
             <td>{{ p.category }}</td>
             <td>{{ p.price }}</td>
+            <td>{{ p.upc }}</td>
+            <td>{{ p.epc }}</td>
             <td>{{ p.stock_quantity }}</td>
             <td>
                 <form method="POST" style="display:inline">
@@ -37,22 +31,13 @@
                     </button>
                 </form>
             </td>
-            <td>
-                <button onclick="addToCart('{{ p.id }}', '{{ p.name }}', '{{ p.price }}' , '{{ p.stock_quantity }}')">
-                    Add to cart
-                </button>
-            </td>
+        
         </tr>
 
         {% endfor %}
     </table>
 </section>
 
-<section class="card">
-    <h2>Cart</h2>
-    <table id="cart-table">
-    </table>
-</section>
 {% endblock %}
 
 {% block scripts %}

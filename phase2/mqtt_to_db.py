@@ -3,13 +3,14 @@ from pathlib import Path
 import paho.mqtt.client as mqtt
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str((PROJECT_ROOT / "phase1").resolve()))
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "phase1.settings")
+sys.path.insert(0, str((PROJECT_ROOT)))
+# sys.path.insert(0, str((PROJECT_ROOT / "phase3").resolve()))
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "phase3.settings")
 
 import django
 django.setup()
 
-from smartstore.models import Fridge
+from phase3.models import Fridge
 from django.utils import timezone
 from email_alerts import send_alert
 
@@ -79,7 +80,7 @@ def on_message(client, userdata, msg):
                 send_alert(to_addr, f.id, f.name, f.topic, t)
                 f.last_alert_ts = timezone.now()
                 f.save(update_fields=["last_alert_ts"])
-                print(f"[email] sent to {to_addr}")
+                print(f"[email] sent to {to_addr}")S
             except Exception as e:
                 print("[email] FAILED:", e)
         else:

@@ -8,26 +8,32 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body>
-    <header class="top-bar">
+   <header class="top-bar">
         <h1>Smart Store</h1>
         <nav class="main-nav">
             <a href="{% url 'default' %}">Dashboard</a>
-            <a href="{% url 'create_customer_page' %}">Create Customer</a>
-            <a href="{% url 'create_product_page' %}">Create Product</a>
-            <a href="{% url 'add_inventory_page' %}">Add Inventory</a>
-            <a href="{% url 'customers_page' %}">Customers</a>
-            <a href="{% url 'products_page' %}">Products</a>
-            <a href="{% url 'inventory_page' %}">Inventory</a>
-            <a href="{% url 'receipts_page' %}">Receipts</a>
+            <a href="{% url 'product_management' %}">Product Management</a>
+            <a href="{% url 'self_checkout_home' %}">Self Checkout</a>
         </nav>
     </header>
 
     <main class="content">
         {% block content %}{% endblock %}
     </main>
-    
+
     <div id="notification-container"></div>
 
-    {% block scripts %}{% endblock %}
+    {% block scripts %}
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    {% if messages %}
+      {% for message in messages %}
+        showNotification("{{ message|escapejs }}", "{{ message.tags|default:'success' }}");
+      {% endfor %}
+    {% endif %}
+  });
+</script>
+    {% endblock %}
 </body>
 </html>

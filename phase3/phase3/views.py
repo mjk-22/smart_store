@@ -1,113 +1,105 @@
 from django.shortcuts import render, redirect
 from .models import Customers, Products, InventoryReceived, Receipts, Receipts_Products
-from .forms import CustomerForm, ProductForm, InventoryForm
+from .forms import CustomerForm, ProductForm, InventoryForm, LoginForm
 from django.db import transaction
 from django.utils import timezone
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.contrib import messages
+from django.contrib.auth import logout
+from .models import Fridge
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 import json
 
-
 def default(request):
-    customer_form = CustomerForm()
-    product_form = ProductForm()
-    inventory_form = InventoryForm()
-    customers = Customers.objects.all()
-    products = Products.objects.all()
-    receipts = Receipts.objects.all()
-    inventory = InventoryReceived.objects.all()
-
-    if (request.method == "POST"):
-        if ("create_customer" in request.POST):
-            customer_form = CustomerForm(request.POST)
-            if customer_form.is_valid():
-                customer_form.save()
-            return redirect("default")
-        elif ("delete_customer" in request.POST):
-            customer_id = request.POST.get("delete_customer")
-            Customers.objects.filter(id=customer_id).delete()
-            return redirect("default")
-        elif ("create_product" in request.POST):
-            product_form = ProductForm(request.POST)
-            if product_form.is_valid():
-                product_form.save()
-            return redirect("default")
-        elif ("delete_product" in request.POST):
-            product_id = request.POST.get("delete_product")
-            Products.objects.filter(id=product_id).delete()
-            return redirect("default")
-        elif ("add_inventory" in request.POST):
-            inventory_form = InventoryForm(request.POST)
-            if inventory_form.is_valid():
-                inventory = inventory_form.save()
-                inventory.product_id.stock_quantity += inventory.quantity_received
-                inventory.product_id.save()
-            return redirect("default")
-        elif (request.headers.get("Content-Type") == "application/json"):
-            try:
-                data = json.loads(request.body.decode("utf-8"))
-                if (data.get("action") == "checkout"):
-                    cart = data.get("cart", {})
-                    print(cart)
-
-                    # Since everything is done on the dashboard, I haven't implemented a login
-                    # feature yet, so there isn't a customer ID that gets passed through yet
-                    #
-                    # customer_id = data.get("customer_id")
-                    # customer = Customers.objects.get(id=customer_id)
-                    customer = Customers.objects.get(id=1)
-                    total_price = 0
-
-                    with transaction.atomic():
-                        for product_id, item_data in cart.items():
-                            quantity = item_data["quantity"]
-                            product= Products.objects.get(id=product_id)
-                            product.stock_quantity -= quantity
-                            product.save()
-                            total_price += product.price * quantity
-                        
-                        receipt = Receipts.objects.create(
-                            customer_id = customer,
-                            time=timezone.now(),
-                            points_earned = int(total_price // 10),
-                            total_price=total_price
-                        )
-
-                        for product_id, item_data in cart.items():
-                            item_quantity = item_data["quantity"]
-                            item_product = Products.objects.get(id=product_id)
-                            Receipts_Products.objects.create(
-                                receipt_id = receipt,
-                                product_id = item_product,
-                                product_quantity = item_quantity
-                            )
-
-
-                    return JsonResponse({"success": True, "redirect_url": "/"})
-            except Exception as e:
-                return JsonResponse({"success": False, "redirect_url": "/"})                 
-        else:
-            return redirect("default")
-
+    # this *is* your fridge dashboard now
+    fridges = Fridge.objects.order_by("id")
+    fridges_data = list(
+        fridges.values(
+            "id",
+            "name",
+            "topic",
+            "temperature",
+            "humidity",
+            "temp_threshold",
+            "humidity_threshold",
+            "fan_on",
+            "updated_at",
+        )
+    )
     context = {
-        'customer_form': customer_form,
-        'product_form': product_form,
-        'inventory_form': inventory_form,
-        'customers': customers,
-        'products': products,
-        'receipts': receipts,
-        'inventory': inventory,
+        "fridges": fridges,
+        "fridges_data": fridges_data,
     }
-    
+    return render(request, "dashboard.html", context)
 
-    if (request.method == "GET"):
-        return render(request, "index.html", context=context)
+
+def get_latest_readings(request):
+    fridges = list(
+        Fridge.objects.values(
+            "id",
+            "name",
+            "topic",
+            "temperature",
+            "humidity",
+            "temp_threshold",
+            "humidity_threshold",
+            "fan_on",
+            "updated_at",
+        ).order_by("id")
+    )
+    return JsonResponse({"fridges": fridges})
+
+
+@csrf_exempt
+def update_thresholds(request, pk):
+    fridge = get_object_or_404(Fridge, pk=pk)
+    if request.method == "POST":
+        try:
+            t = request.POST.get("temp_threshold")
+            h = request.POST.get("humidity_threshold")
+
+            if t is not None:
+                fridge.temp_threshold = float(t)
+            if h is not None:
+                fridge.humidity_threshold = float(h)
+
+            fridge.save(update_fields=["temp_threshold", "humidity_threshold"])
+            messages.success(request, f"{fridge.name} thresholds updated.")
+        except Exception as e:
+            messages.error(request, f"Failed to update thresholds: {e}")
+    return redirect("default")
+
+
+@require_POST
+def fan_toggle(request, pk):
+    fridge = get_object_or_404(Fridge, pk=pk)
+    action = (request.POST.get("action") or "").upper()
+    want_on = (action == "ON")
+
+    fridge.fan_on = want_on
+    fridge.save(update_fields=["fan_on"])
+
+    try:
+        import paho.mqtt.publish as publish
+        hostname = "localhost"
+        topic = f"fan/{fridge.topic}/cmd"
+        payload = action
+        publish.single(topic, payload, hostname=hostname)
+    except Exception:
+        pass
+
+    return redirect("default")
     
 
 def create_customer_page(request):
     if request.method == "POST":
         form = CustomerForm(request.POST)
         if form.is_valid():
-            form.save()
+            customer=form.save()
+            messages.success(request,f"Customer '{customer.name}' was created.")
+
             return redirect("create_customer_page")
     else:
         form = CustomerForm()
@@ -120,7 +112,9 @@ def create_product_page(request):
     if request.method == "POST":
         form = ProductForm(request.POST)
         if form.is_valid():
-            form.save()
+            product=form.save()
+            messages.success(request,f"Product '{product.name}' was created.")
+
             return redirect("create_product_page")
     else:
         form = ProductForm()
@@ -138,6 +132,7 @@ def add_inventory_page(request):
             product.stock_quantity += inventory.quantity_received
             product.save()
             inventory.save()
+            messages.success(request,f"Added '{inventory.quantity_received}' units to '{product.name}'.")
             return redirect("add_inventory_page")
     else:
         form = InventoryForm()
@@ -149,6 +144,7 @@ def customers_page(request):
     if request.method == "POST" and "delete_customer" in request.POST:
         customer_id = request.POST.get("delete_customer")
         Customers.objects.filter(id=customer_id).delete()
+        messages.success(request,f"Customer deleted")
         return redirect("customers_page")
 
     customers = Customers.objects.all()
@@ -160,6 +156,7 @@ def products_page(request):
     if request.method == "POST" and "delete_product" in request.POST:
         product_id = request.POST.get("delete_product")
         Products.objects.filter(id=product_id).delete()
+        messages.success(request,f"Product deleted")
         return redirect("products_page")
 
     products = Products.objects.all()
@@ -174,13 +171,29 @@ def inventory_page(request):
 
 
 def receipts_page(request):
-    receipts = Receipts.objects.all()
+    receipts = Receipts.objects.select_related("customer_id").all().order_by("-time")
     context = {"receipts": receipts}
     return render(request, "receipts.html", context)
+
+def receipt_admin_detail(request, receipt_id):
+    receipt = get_object_or_404(Receipts, id=receipt_id)
+    items = Receipts_Products.objects.filter(
+        receipt_id=receipt
+    ).select_related("product_id")
+
+    context = {
+        "receipt": receipt,
+        "items": items,
+    }
+    return render(request, "receipt_admin_detail.html", context)
 
 def checkout(request):
     if request.method != "POST" or request.headers.get("Content-Type") != "application/json":
         return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
+
+    customer_id = request.session.get("customer_id")
+    if not customer_id:
+        return JsonResponse({"success": False, "error": "Not logged in"}, status=403)
 
     try:
         data = json.loads(request.body.decode("utf-8"))
@@ -191,13 +204,10 @@ def checkout(request):
         if not cart:
             return JsonResponse({"success": False, "error": "Cart is empty"}, status=400)
 
-        # TODO: get the real logged-in customer
-        customer = Customers.objects.get(id=1)
-
+        customer = Customers.objects.get(id=customer_id)
         total_price = 0
 
         with transaction.atomic():
-            #update products and does total
             for product_id, item in cart.items():
                 product = Products.objects.get(id=product_id)
                 quantity = int(item["quantity"])
@@ -207,13 +217,16 @@ def checkout(request):
 
                 total_price += float(product.price) * quantity
 
-            #create receipt
+            points_earned = int(total_price // 10)
             receipt = Receipts.objects.create(
                 customer_id=customer,
                 time=timezone.now(),
-                points_earned=int(total_price // 10), 
+                points_earned=points_earned,
                 total_price=total_price,
             )
+
+            customer.points += points_earned
+            customer.save(update_fields=["points"])
 
             for product_id, item in cart.items():
                 product = Products.objects.get(id=product_id)
@@ -224,8 +237,91 @@ def checkout(request):
                     product_quantity=quantity,
                 )
 
-        return JsonResponse({"success": True, "redirect_url": "/receipts/"})
+        return JsonResponse({
+            "success": True,
+            "redirect_url": f"/receipt/{receipt.id}/"
+        })
     except Exception as e:
         print("Checkout error:", e)
         return JsonResponse({"success": False, "error": "Checkout failed"}, status=500)
+    
+
+def product_management_home(request):
+    return render(request, "product_management.html")
+
+def self_checkout_home(request):
+    return render(request, "self_checkout_home.html")
+
+def self_checkout_login(request):
+    login_form = LoginForm()
+    register_form = CustomerForm()
+
+    if request.method == "POST":
+        if "login" in request.POST:
+            login_form = LoginForm(request.POST)
+            if login_form.is_valid():
+                email = login_form.cleaned_data["email"]
+                password = login_form.cleaned_data["password"]
+                customer = Customers.objects.filter(email=email, password=password).first()
+                if customer:
+                    request.session["customer_id"] = customer.id
+                    return redirect("self_checkout_cart")
+                else:
+                    login_form.add_error(None, "Invalid email or password.")
+        elif "register" in request.POST:
+            register_form = CustomerForm(request.POST)
+            if register_form.is_valid():
+                customer = register_form.save()
+                request.session["customer_id"] = customer.id
+                return redirect("self_checkout_cart")
+
+    context = {
+        "login_form": login_form,
+        "register_form": register_form,
+    }
+    return render(request, "self_checkout_login.html", context)
+
+def checkout_logout(request):
+    logout(request)
+    return redirect('self_checkout_home')   
+
+
+def self_checkout_cart(request):
+    customer_id = request.session.get("customer_id")
+    if not customer_id:
+        return redirect("self_checkout_login")
+
+    customer = get_object_or_404(Customers, id=customer_id)
+    products = Products.objects.all().order_by("name")
+    receipts = Receipts.objects.filter(customer_id=customer).order_by("-time")
+
+    context = {
+        "customer": customer,
+        "products": products,
+        "receipts": receipts,
+    }
+    return render(request, "self_checkout_cart.html", context)
+
+
+def customer_account(request):
+    customer_id = request.session.get("customer_id")
+    if not customer_id:
+        return redirect("self_checkout_login")
+
+    customer = get_object_or_404(Customers, id=customer_id)
+    receipts = Receipts.objects.filter(customer_id=customer).order_by("-time")
+
+    context = {"customer": customer, "receipts": receipts}
+    return render(request, "customer_account.html", context)
+
+
+def receipt_detail(request, receipt_id):
+    receipt = get_object_or_404(Receipts, id=receipt_id)
+    items = Receipts_Products.objects.filter(receipt_id=receipt).select_related("product_id")
+    context = {
+        "receipt": receipt,
+        "items": items,
+        "customer": receipt.customer_id,
+    }
+    return render(request, "receipt_detail.html", context)
 

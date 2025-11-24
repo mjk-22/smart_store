@@ -13,8 +13,16 @@
         </tr>
         {% for r in receipts %}
         <tr>
-            <td>{{ r.id }}</td>
-            <td>{{ r.customer.name }}</td>
+            <td>
+                <a href="{% url 'receipt_admin_detail' r.id %}">
+                    {{ r.id }}
+                </a>
+            </td>
+            <td>
+                <a href="{% url 'receipt_admin_detail' r.id %}">
+                    {{ r.customer_id.name }}
+                </a>
+            </td>
             <td>{{ r.total_price }}</td>
             <td>{{ r.points_earned }}</td>
             <td>{{ r.time }}</td>

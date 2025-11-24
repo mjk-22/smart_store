@@ -1,0 +1,88 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="card">
+    <h2>Self Checkout - Scan & Pay</h2>
+
+    <div style="display:grid; grid-template-columns:1fr 2fr; gap:24px;">
+        <div>
+            <h3>Account</h3>
+            <p><strong>Name:</strong> {{ customer.name }}</p>
+            <p><strong>Email:</strong> {{ customer.email }}</p>
+            <p><strong>Membership #:</strong> {{ customer.membership_id }}</p>
+            <p><strong>Total points:</strong> {{ customer.points }}</p>
+
+            <p class="account">
+                <a href="{% url 'customer_account' %}">View full account & history</a>
+            </p>
+
+            <h3>Recent Purchases</h3>
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Points</th>
+                </tr>
+                {% for r in receipts|slice:":5" %}
+                <tr>
+                    <td><a href="{% url 'receipt_detail' r.id %}">{{ r.time }}</a></td>
+                    <td>{{ r.total_price }}</td>
+                    <td>{{ r.points_earned }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3">No purchases yet.</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div>
+            <div class="scan-bar">
+                <form id="scan-form" onsubmit="handleScan(event)">
+                    <label for="scan-code">Scan barcode / RFID:</label>
+                    <input id="scan-code" type="text" autocomplete="off" autofocus>
+                    <button type="submit">Add</button>
+                </form>
+            </div>
+
+            <!-- <h3>Products</h3> -->
+            <table>
+                <tr>
+                    <!-- <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th></th> -->
+                </tr>
+                {% for p in products %}
+                <tr data-product-id="{{ p.id }}"
+                    data-name="{{ p.name }}"
+                    data-price="{{ p.price }}"
+                    data-stock="{{ p.stock_quantity }}"
+                    data-barcode="{{ p.upc }}"
+                    data-rfid="{{ p.epc }}">
+                    <!-- <td>{{ p.name }}</td>
+                    <td>{{ p.category }}</td>
+                    <td>{{ p.price }}</td>
+                    <td>{{ p.stock_quantity }}</td>
+                    <td>
+                        <button onclick="addToCart('{{ p.id }}', '{{ p.name }}', '{{ p.price }}', '{{ p.stock_quantity }}')">
+                            Add to cart
+                        </button>
+                    </td> -->
+                </tr>
+                {% endfor %}
+            </table>
+
+            <h3>Cart</h3>
+            <table id="cart-table">
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/main.js' %}"></script>
+{% endblock %}

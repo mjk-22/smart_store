@@ -6,36 +6,52 @@ function renderCart() {
     cartTable.innerHTML = `
         <tr>
             <th>Name</th>
-            <th>Quantity</th>
-            <th>Price</th>
+            <th>Qty</th>
+            <th>Line Total</th>
+            <th></th>
         </tr>
     `;
 
+    let overallTotal = 0;
+
     Object.entries(cart).forEach(([productID, item]) => {
+        const lineTotal = item.price * item.quantity;
+        overallTotal += lineTotal;
+
         cartTable.innerHTML += `
-        <tr>
-            <td>${item.name}</td>
-            <td>${item.quantity}</td>
-            <td>$${item.price}</td>
-            <td>
-                <button onclick="removeFromCart('${productID}')">
-                    Remove From Cart
-                </button>
-            </td>
-        </tr>
-        `
+            <tr>
+                <td>${item.name}</td>
+                <td>${item.quantity}</td>
+                <td>$${lineTotal.toFixed(2)}</td>
+                <td>
+                    <button onclick="removeFromCart('${productID}')">
+                        Remove
+                    </button>
+                </td>
+            </tr>
+        `;
     });
 
-    if (cart != null) {
+    if (Object.keys(cart).length > 0) {
         cartTable.innerHTML += `
-        <tr>
-            <button onclick="checkout()">
-                Checkout
-            </button>
-        </tr>
-        `
+            <tr>
+                <td colspan="4" style="text-align: right; font-weight: bold;">
+                    Total: $${overallTotal.toFixed(2)}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: right;">
+                    <button onclick="checkout()">Checkout</button>
+                </td>
+            </tr>
+        `;
     }
 }
+
+
+
+
+
 
 function addToCart(productID, name, price, stock) {
     if (!cart[productID] && stock > 0) {
