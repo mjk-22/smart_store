@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from .models import Customers, Products, InventoryReceived, Receipts, Receipts_Products
 from .forms import CustomerForm, ProductForm, InventoryForm, LoginForm, SalesReportsFiltersForm
 from django.db import transaction
-from django.db.models import Sum, Count, F
+from django.db.models import Sum, F, Q, Value, FloatField
+from django.db.models.functions import Coalesce
 from django.utils import timezone
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -329,37 +330,65 @@ def receipt_detail(request, receipt_id):
 
 def sales_report(request):
     form = SalesReportsFiltersForm(request.GET or None)
+
     start_date = form["start_date"].value() or "2025-11-01"
     end_date = form["end_date"].value() or str(date.today())
     category = form["category"].value() or ""
-    sales = Receipts_Products.objects.filter(receipt_id__time__date__range=[start_date, end_date])
+    products = Products.objects.all()
+
     highest_selling = None
     lowest_selling = None
+    date_filter = {}
 
     start_date = date.fromisoformat(start_date)
     end_date = date.fromisoformat(end_date) 
 
     if category:
-        sales = sales.filter(product_id__category=category)
+        products = products.filter(category=category)
 
-    sales = sales.values("product_id__name", "product_id__price", "product_id__category").annotate(
-        total_quantity = Sum("product_quantity"), total_revenue = Sum(F("product_quantity") * F("product_id__price"))
-        ).order_by("-total_quantity")
-    
-    if (len(sales) > 0):
-        highest_selling = sales[0]
-        lowest_selling = sales[len(sales) - 1]
+    date_filter = {
+        "receipts_products__receipt_id__time__date__gte":start_date,
+        "receipts_products__receipt_id__time__date__lte":end_date
+    }
 
-    total_revenue = sum(item["total_revenue"] for item in sales)
+    products_with_sales = products.annotate(
+        quantity_sold=Coalesce(
+            Sum("receipts_products__product_quantity", filter=Q(**date_filter)),
+            Value(0)
+        ),
+        revenue=Coalesce(
+            Sum(
+                F("receipts_products__product_quantity") * F("price"),
+                filter=Q(**date_filter),
+            ),
+            Value(0.0)
+        )
+    ).order_by("name")
+
+    total_revenue = sum(p.revenue for p in products_with_sales)
+
+    if (products_with_sales):
+        max_quantity = max(p.quantity_sold for p in products_with_sales)
+        min_quantity = min(p.quantity_sold for p in products_with_sales)
+
+        highest_selling = [p for p in products_with_sales if p.quantity_sold == max_quantity]
+        lowest_selling = [p for p in products_with_sales if p.quantity_sold == min_quantity]
+    else:
+        highest_selling = []
+        lowest_selling = []
+        max_quantity = 0
+        min_quantity = 0
 
     context = {
         "form": form,
-        "sales": sales,
+        "products": products_with_sales,
         "highest_selling": highest_selling,
         "lowest_selling": lowest_selling,
+        "highest_quantity": max_quantity,
+        "lowest_quantity": min_quantity,
         "total_revenue": total_revenue,
         "start_date": start_date,
-        "end_date": end_date,
-        "category_filter": category,
+        "end_date": end_date
     }
+
     return render(request, "sales_report.html", context)

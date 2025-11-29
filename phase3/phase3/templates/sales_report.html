@@ -16,39 +16,49 @@
 <p><strong>Total Revenue:</strong> ${{ total_revenue }}</p>
 
 {% if highest_selling %}
-    <p><strong>Highest Selling:</strong> 
-    {{ highest_selling.product_id__name }} ({{ highest_selling.total_quantity }} sold)</p>
-{% endif %}
+        <p><strong>Highest Selling Product(s):</strong></p>
+        <ul>
+            {% for p in highest_selling %}
+                <li>{{ p.name }} ({{ p.quantity_sold }} sold)</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
 {% if lowest_selling %}
-    <p><strong>Lowest Selling:</strong> 
-    {{ lowest_selling.product_id__name }} ({{ lowest_selling.total_quantity }} sold)</p>
-{% endif %}
+        <p><strong>Lowest Selling Product(s):</strong></p>
+        <ul>
+            {% for p in lowest_selling %}
+                <li>{{ p.name }} ({{ p.quantity_sold }} sold)</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
 <br>
 
 <h2>Sales Breakdown</h2>
 
-<table cellpadding="8" cellspacing="0">
-    <thead>
-        <tr>
-            <th>Product</th>
-            <th>Category</th>
-            <th>Quantity Sold</th>
-            <th>Total Revenue</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        {% for row in sales %}
+<table cellpadding="6">
+        <thead>
             <tr>
-                <td>{{ row.product_id__name }}</td>
-                <td>{{ row.product_id__category }}</td>
-                <td>{{ row.total_quantity }}</td>
-                <td>${{ row.total_revenue }}</td>
+                <th>Product</th>
+                <th>Quantity Sold</th>
+                <th>Revenue ($)</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.quantity_sold }}</td>
+                <td>{{ product.revenue }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">No products found.</td>
             </tr>
         {% endfor %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
 </section>
 {% endblock %}
