@@ -54,9 +54,15 @@ function renderCart() {
 
 
 function addToCart(productID, name, price, stock) {
+
     if (!cart[productID] && stock > 0) {
         cart[productID] = { name, price, quantity: 1 };
     } else {
+        if (stock <= 0) {
+            showNotification("No more stock available", "error");
+            return;
+        }
+
         if (cart[productID].quantity < stock) {
             cart[productID].quantity += 1;
         } else {
@@ -66,6 +72,13 @@ function addToCart(productID, name, price, stock) {
     }
     renderCart();
     showNotification(`Added ${name} to cart`, "success");
+
+    console.log("ID: " + productID);
+    console.log("Name: " + name);
+    console.log("Price: " + price);
+    console.log("Stock: " + stock);
+
+    console.log(cart[productID])
 }
 
 function removeFromCart(productID) {

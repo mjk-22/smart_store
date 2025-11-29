@@ -325,3 +325,5 @@ def receipt_detail(request, receipt_id):
     }
     return render(request, "receipt_detail.html", context)
 
+def sales_report(request):
+    return render(request, "sales_report.html")
