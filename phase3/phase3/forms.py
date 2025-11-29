@@ -27,7 +27,7 @@ class LoginForm(forms.Form):
 class SalesReportsFiltersForm(forms.Form):
     start_date = forms.DateField(required = False, widget = forms.DateInput(attrs= {"type" : "date"}))
     end_date = forms.DateField(required = False, widget = forms.DateInput(attrs={"type" : "date"}))
-    category = forms.ChoiceField(required = False, choises = [("","All Categories")], widget=forms.Select())
+    category = forms.ChoiceField(required = False, choices = [("","All Categories")], widget=forms.Select())
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         categories = Products.objects.values_list("category", flat=True).distinct()

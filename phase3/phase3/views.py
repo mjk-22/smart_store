@@ -328,7 +328,7 @@ def receipt_detail(request, receipt_id):
     return render(request, "receipt_detail.html", context)
 
 def sales_report(request):
-    form = SalesReportsFiltersForm(request.Get or None)
+    form = SalesReportsFiltersForm(request.GET or None)
     start_date = form["start_date"].value() or "2025-11-01"
     end_date = form["end_date"].value() or str(date.today())
     category = form["category"].value() or ""
@@ -348,7 +348,7 @@ def sales_report(request):
     
     if (len(sales) > 0):
         highest_selling = sales[0]
-        lowest_selling = sales[-1]
+        lowest_selling = sales[len(sales) - 1]
 
     total_revenue = sum(item["total_revenue"] for item in sales)
 

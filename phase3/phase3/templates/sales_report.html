@@ -2,9 +2,53 @@
 
 {% block content %}
 <section class="card">
-    <h2>Receipts</h2>
-    <ul>
-        <li>{{ report_details.total_sales }}</li>
-    </ul>
+    <h1>Sales Report</h1>
+
+<form method="get" style="margin-bottom: 20px;">
+    {{ form.as_p }}
+    <button type="submit">Apply Filters</button>
+</form>
+
+<hr>
+
+<h2>Summary ({{ start_date }} -> {{ end_date }})</h2>
+
+<p><strong>Total Revenue:</strong> ${{ total_revenue }}</p>
+
+{% if highest_selling %}
+    <p><strong>Highest Selling:</strong> 
+    {{ highest_selling.product_id__name }} ({{ highest_selling.total_quantity }} sold)</p>
+{% endif %}
+
+{% if lowest_selling %}
+    <p><strong>Lowest Selling:</strong> 
+    {{ lowest_selling.product_id__name }} ({{ lowest_selling.total_quantity }} sold)</p>
+{% endif %}
+
+<br>
+
+<h2>Sales Breakdown</h2>
+
+<table cellpadding="8" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Category</th>
+            <th>Quantity Sold</th>
+            <th>Total Revenue</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for row in sales %}
+            <tr>
+                <td>{{ row.product_id__name }}</td>
+                <td>{{ row.product_id__category }}</td>
+                <td>{{ row.total_quantity }}</td>
+                <td>${{ row.total_revenue }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 </section>
 {% endblock %}
