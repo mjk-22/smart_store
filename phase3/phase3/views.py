@@ -328,6 +328,10 @@ def receipt_detail(request, receipt_id):
     }
     return render(request, "receipt_detail.html", context)
 
+def admin_reports_home(request):
+    return render(request, "admin_reports_home.html")
+
+
 def sales_report(request):
     form = SalesReportsFiltersForm(request.GET or None)
 

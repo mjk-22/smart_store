@@ -49,5 +49,6 @@ urlpatterns = [
     path("self-checkout/logout/", views.checkout_logout, name="checkout_logout"),
 
     # Phase 4 reports
+    path("admin-reports/", views.admin_reports_home, name="admin_reports_home"),
     path('sales-report/', views.sales_report, name='sales_report'),
 ]

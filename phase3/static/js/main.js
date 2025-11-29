@@ -72,13 +72,6 @@ function addToCart(productID, name, price, stock) {
     }
     renderCart();
     showNotification(`Added ${name} to cart`, "success");
-
-    console.log("ID: " + productID);
-    console.log("Name: " + name);
-    console.log("Price: " + price);
-    console.log("Stock: " + stock);
-
-    console.log(cart[productID])
 }
 
 function removeFromCart(productID) {
