@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Customers, Products, InventoryReceived, Receipts, Receipts_Products
-from .forms import CustomerForm, ProductForm, InventoryForm, LoginForm
+from .forms import CustomerForm, ProductForm, InventoryForm, LoginForm, SalesReportsFiltersForm
 from django.db import transaction
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, F
 from django.utils import timezone
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -12,6 +12,7 @@ from .models import Fridge
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 import json
+from datetime import date
 
 def default(request):
     # this *is* your fridge dashboard now
@@ -327,10 +328,38 @@ def receipt_detail(request, receipt_id):
     return render(request, "receipt_detail.html", context)
 
 def sales_report(request):
-    items = Receipts_Products.objects.select_related('product_id', 'receipt_id').all()
-    report_details = Receipts_Products.objects.values("product_id").annotate(total_sales=Count("product_id"), revenue=Sum('product_quantity'))
+    form = SalesReportsFiltersForm(request.Get or None)
+    start_date = form["start_date"].value() or "2025-11-01"
+    end_date = form["end_date"].value() or str(date.today())
+    category = form["category"].value() or ""
+    sales = Receipts_Products.objects.filter(receipt_id__time__date__range=[start_date, end_date])
+    highest_selling = None
+    lowest_selling = None
+
+    start_date = date.fromisoformat(start_date)
+    end_date = date.fromisoformat(end_date) 
+
+    if category:
+        sales = sales.filter(product_id__category=category)
+
+    sales = sales.values("product_id__name", "product_id__price", "product_id__category").annotate(
+        total_quantity = Sum("product_quantity"), total_revenue = Sum(F("product_quantity") * F("product_id__price"))
+        ).order_by("-total_quantity")
+    
+    if (len(sales) > 0):
+        highest_selling = sales[0]
+        lowest_selling = sales[-1]
+
+    total_revenue = sum(item["total_revenue"] for item in sales)
+
     context = {
-        "items":items,
-        "details":report_details
+        "form": form,
+        "sales": sales,
+        "highest_selling": highest_selling,
+        "lowest_selling": lowest_selling,
+        "total_revenue": total_revenue,
+        "start_date": start_date,
+        "end_date": end_date,
+        "category_filter": category,
     }
     return render(request, "sales_report.html", context)
