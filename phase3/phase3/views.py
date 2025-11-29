@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Customers, Products, InventoryReceived, Receipts, Receipts_Products
 from .forms import CustomerForm, ProductForm, InventoryForm, LoginForm
 from django.db import transaction
+from django.db.models import Sum, Count
 from django.utils import timezone
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -326,4 +327,10 @@ def receipt_detail(request, receipt_id):
     return render(request, "receipt_detail.html", context)
 
 def sales_report(request):
-    return render(request, "sales_report.html")
+    items = Receipts_Products.objects.select_related('product_id', 'receipt_id').all()
+    report_details = Receipts_Products.objects.values("product_id").annotate(total_sales=Count("product_id"), revenue=Sum('product_quantity'))
+    context = {
+        "items":items,
+        "details":report_details
+    }
+    return render(request, "sales_report.html", context)
