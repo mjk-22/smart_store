@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from .models import Customers, Products, InventoryReceived, Receipts, Receipts_Products
 from .forms import CustomerForm, ProductForm, InventoryForm, LoginForm, SalesReportsFiltersForm
 from django.db import transaction
-from django.db.models import Sum, F, Q, Value, FloatField
-from django.db.models.functions import Coalesce
+from django.db.models import Sum, F, Q, Value, FloatField, Min, Count
+from django.db.models.functions import Coalesce 
 from django.utils import timezone
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -438,3 +438,40 @@ def inventory_report(request):
         "end_date": end_date,
     }
     return render(request, "inventory_report.html", context)
+
+def activity_report(request):
+
+    form = SalesReportsFiltersForm(request.GET or None)
+
+    start_date_str = form["start_date"].value() or "2025-11-01"
+    end_date_str = form["end_date"].value() or str(date.today())
+
+    start_date = date.fromisoformat(start_date_str)
+    end_date = date.fromisoformat(end_date_str)
+
+    receipts = Receipts.objects.filter(
+        time__date__gte=start_date,
+        time__date__lte=end_date
+    )
+
+    total_customers = receipts.values("customer_id").distinct().count()
+
+ 
+    new_customers = (
+        Customers.objects.annotate(new_customer=Min("receipts__time"))
+        .filter(new_customer__date__gte=start_date,new_customer__date__lte=end_date)
+        .count()
+    )
+
+    returning_customers = max(total_customers - new_customers, 0)
+
+    context = {
+        "form": form,
+        "start_date": start_date,
+        "end_date": end_date,
+        "total_customers": total_customers,
+        "new_customers": new_customers,
+        "returning_customers": returning_customers,
+    }
+
+    return render(request, "activity_report.html", context)
