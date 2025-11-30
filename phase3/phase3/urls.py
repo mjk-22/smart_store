@@ -53,4 +53,8 @@ urlpatterns = [
     path('sales-report/', views.sales_report, name='sales_report'),
     path('inventory-reports/', views.inventory_report, name='inventory_report'),
     path('activity-report/', views.activity_report, name='activity_report'),
+    #path('customer-portal/', views.customer_portal, name='customer_portal'),
+    path("customer/history/", views.customer_receipt_history, name="customer_receipt_history"),
+    #path("customer/search/", views.customer_purchase_search, name="customer_purchase_search"),
+
 ]

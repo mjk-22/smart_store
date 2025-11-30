@@ -32,3 +32,10 @@ class SalesReportsFiltersForm(forms.Form):
         super().__init__(*args, **kwargs)
         categories = Products.objects.values_list("category", flat=True).distinct()
         self.fields["category"].choices += [(c, c) for c in categories]
+
+class DateRangeForm(forms.Form):
+    start_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+    end_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+
+class PurchaseSearchForm(forms.Form):
+    item_name = forms.CharField(max_length=255)

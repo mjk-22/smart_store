@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Customers, Products, InventoryReceived, Receipts, Receipts_Products
-from .forms import CustomerForm, ProductForm, InventoryForm, LoginForm, SalesReportsFiltersForm
+from .forms import CustomerForm, ProductForm, InventoryForm, LoginForm, SalesReportsFiltersForm,DateRangeForm,PurchaseSearchForm
 from django.db import transaction
 from django.db.models import Sum, F, Q, Value, FloatField, Min, Count
 from django.db.models.functions import Coalesce 
@@ -475,3 +475,53 @@ def activity_report(request):
     }
 
     return render(request, "activity_report.html", context)
+
+
+# This allows the customer to check their receipt history and their total money spent and theri search in purchase history
+def customer_receipt_history(request):
+    customer_id = request.session.get("customer_id")
+    if not customer_id:
+        return redirect("self_checkout_login")
+
+    customer = get_object_or_404(Customers, id=customer_id)
+
+    # --- Date Range Filter ---
+    receipts = Receipts.objects.filter(customer_id=customer).order_by("-time")
+    form = DateRangeForm(request.GET)
+
+    if form.is_valid():
+        start = form.cleaned_data.get("start_date")
+        end = form.cleaned_data.get("end_date")
+        if start:
+            receipts = receipts.filter(time__date__gte=start)
+        if end:
+            receipts = receipts.filter(time__date__lte=end)
+
+    total_spent = receipts.aggregate(sum=Sum("total_price"))["sum"] or 0
+
+    # --- Item Search Filter ---
+    search_form = PurchaseSearchForm(request.GET)
+    info = None
+
+    if "item_name" in request.GET and search_form.is_valid():
+        name = search_form.cleaned_data["item_name"]
+
+        items = Receipts_Products.objects.filter(
+            receipt_id__customer_id=customer,
+            product_id__name__icontains=name
+        ).select_related("product_id", "receipt_id").order_by("-receipt_id__time")
+
+        info = {
+            "item_name": name,
+            "count": items.count(),
+            "items": items,
+        }
+
+    return render(request, "customer_receipt_history.html", {
+        "customer": customer,
+        "receipts": receipts,
+        "form": form,
+        "search_form": search_form,
+        "info": info,
+        "total_spent": total_spent,
+    })
