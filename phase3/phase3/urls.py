@@ -52,4 +52,5 @@ urlpatterns = [
     path("admin-reports/", views.admin_reports_home, name="admin_reports_home"),
     path('sales-report/', views.sales_report, name='sales_report'),
     path('inventory-reports/', views.inventory_report, name='inventory_report'),
+    path('activity-report/', views.activity_report, name='activity_report'),
 ]
