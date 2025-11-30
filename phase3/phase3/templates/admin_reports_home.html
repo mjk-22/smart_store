@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <h2>Admin Reports</h2>
+    <p>Use these tools to manage Stock and Inventory reports.</p>
+
+    <ul class="management-tabs">
+        <li><a href="{% url 'sales_report' %}">Sales Report</a></li>
+    </ul>
+</section>
+{% endblock %}
