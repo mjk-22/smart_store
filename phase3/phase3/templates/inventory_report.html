@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <h1>Inventory Report</h1>
+
+    <form method="get" style="margin-bottom:20px;">
+        {{ form.as_p }}
+        <button type="submit">Apply Filters</button>
+    </form>
+
+    <h2>Summary ({{ start_date }} → {{ end_date }})</h2>
+
+    <table cellpadding="6">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Qty Received (period)</th>
+                <th>Current Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.category }}</td>
+                <td>{{ product.quantity_received }}</td>
+                <td>
+                    {{ product.stock_quantity }}
+                    {% if product.stock_quantity|default:0 <= 5 %}
+                        <span style="color:#b91c1c; font-size:12px;">(Low)</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">No products found for this period / filter.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

@@ -396,3 +396,45 @@ def sales_report(request):
     }
 
     return render(request, "sales_report.html", context)
+
+
+def inventory_report(request):
+
+    form = SalesReportsFiltersForm(request.GET or None)
+
+    start_date_str = form["start_date"].value() or "2025-11-01"
+    end_date_str   = form["end_date"].value() or str(date.today())
+    category       = form["category"].value() or ""
+
+    start_date = date.fromisoformat(start_date_str)
+    end_date   = date.fromisoformat(end_date_str)
+
+    products = Products.objects.all()
+    if category:
+        products = products.filter(category=category)
+
+    date_filter = Q(
+        inventoryreceived__date_received__gte=start_date,
+        inventoryreceived__date_received__lte=end_date,
+    )
+
+    products_with_inventory = (
+        products.annotate(
+            quantity_received=Coalesce(
+                Sum(
+                    "inventoryreceived__quantity_received",
+                    filter=date_filter,
+                ),
+                Value(0),
+            )
+        )
+        .order_by("name")
+    )
+
+    context = {
+        "form": form,
+        "products": products_with_inventory,
+        "start_date": start_date,
+        "end_date": end_date,
+    }
+    return render(request, "inventory_report.html", context)
