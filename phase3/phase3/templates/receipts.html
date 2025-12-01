@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <h2>Receipts</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Total</th>
+            <th>Points Earned</th>
+            <th>Date</th>
+        </tr>
+        {% for r in receipts %}
+        <tr>
+            <td>
+                <a href="{% url 'receipt_admin_detail' r.id %}">
+                    {{ r.id }}
+                </a>
+            </td>
+            <td>
+                <a href="{% url 'receipt_admin_detail' r.id %}">
+                    {{ r.customer_id.name }}
+                </a>
+            </td>
+            <td>{{ r.total_price }}</td>
+            <td>{{ r.points_earned }}</td>
+            <td>{{ r.time }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</section>
+{% endblock %}

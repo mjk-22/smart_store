@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <h2>Smart Store - Self Checkout</h2>
+    <p>Scan your items, proceed to checkout , and earn loyalty points.</p>
+    <a class="btn-start" href="{% url 'self_checkout_login' %}">
+        Start
+    </a>
+</section>
+{% endblock %}

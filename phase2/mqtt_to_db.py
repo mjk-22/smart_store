@@ -3,13 +3,14 @@ from pathlib import Path
 import paho.mqtt.client as mqtt
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str((PROJECT_ROOT / "phase1").resolve()))
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "phase1.settings")
+sys.path.insert(0, str((PROJECT_ROOT/"phase3")))
+# sys.path.insert(0, str((PROJECT_ROOT / "phase3").resolve()))
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "phase3.settings")
 
 import django
 django.setup()
 
-from smartstore.models import Fridge
+from phase3.models import Fridge
 from django.utils import timezone
 from email_alerts import send_alert
 
@@ -17,7 +18,7 @@ BROKER = "localhost"
 PORT = 1883
 TOPICS = ["frig1", "frig2"]
 
-DEFAULT_ALERT_TO = "email address that receive alert"
+DEFAULT_ALERT_TO = "manal.jkini@gmail.com"
 ALERT_COOLDOWN_SEC = 60
 AUTO_OFF_HYST = 0.5
 

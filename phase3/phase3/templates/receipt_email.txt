@@ -1,0 +1,15 @@
+Smart Store - Receipt #{{ receipt.id }}
+
+Customer: {{ customer.name }}
+Membership #: {{ customer.membership_id }}
+Date: {{ receipt.time }}
+
+Items:
+{% for item in items %}
+- {{ item.product_id.name }} (x{{ item.product_quantity }}) - {{ item.product_id.price|floatformat:2 }}
+{% endfor %}
+
+Points earned: {{ receipt.points_earned }}
+Total: {{ receipt.total_price|floatformat:2 }}
+
+Thank you for shopping at Smart Store!

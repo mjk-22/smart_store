@@ -6,16 +6,16 @@ from pathlib import Path
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent   
-PROJECT_DIR = BASE_DIR / "phase1"
-sys.path.insert(0, str(PROJECT_DIR))
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "phase1.settings")
+# PROJECT_DIR = BASE_DIR / "phase3"
+sys.path.insert(0, str(BASE_DIR / "phase3"))
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "phase3.settings")
 import django
 django.setup()
 
-from smartstore.models import Fridge
+from phase3.models import Fridge
 
-GMAIL_ADDRESS = "email that read reply"
-APP_PASSWORD  = ""
+GMAIL_ADDRESS = "manaljk2020@gmail.com"
+APP_PASSWORD  = "tubq vvec dnix lxtq"
 
 BROKER = "localhost"
 PORT   = 1883

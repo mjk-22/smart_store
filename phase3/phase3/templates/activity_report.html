@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <h1>Customer Activity Report</h1>
+
+    <form method="get" style="margin-bottom:20px;">
+        {{ form.as_p }}
+        <button type="submit">Apply Filters</button>
+    </form>
+
+    <h2>Summary ({{ start_date }} -> {{ end_date }})</h2>
+
+    <table cellpadding="6">
+        <thead>
+            <tr>
+                <th>Total Customers</th>
+                <th>New Customers</th>
+                <th>Returning Customers</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ total_customers }}</td>
+                <td>{{ new_customers }}</td>
+                <td>{{ returning_customers }}</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+{% endblock %}

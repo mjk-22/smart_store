@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <h2>Search Purchase History</h2>
+
+    <!-- Search Form -->
+    <form method="GET" class="filter-form">
+        {{ form.as_p }}
+        <button type="submit">Search</button>
+    </form>
+
+    {% if info %}
+        <h3>Item: {{ info.item_name }}</h3>
+        <p><strong>Purchased:</strong> {{ info.count }} times</p>
+
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+
+            {% for it in info.items %}
+            <tr>
+                <td>{{ it.receipt_id.time }}</td>
+                <td>${{ it.product_id.price }}</td>
+                <td>{{ it.product_quantity }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+</section>
+{% endblock %}

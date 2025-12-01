@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<section class="card">
+    <h2>Products</h2>
+    
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>UPC</th>
+            <th>EPC</th>
+            <th>Stock</th>
+        </tr>
+        {% for p in products %}
+        <tr data-product-id="{{ p.id }}" data-name="{{ p.name }}" data-price="{{ p.price }}"
+            data-stock="{{ p.stock_quantity }}" data-barcode="{{ p.upc }}" data-rfid="{{ p.epc }}">
+        <tr>
+            <td>{{ p.name }}</td>
+            <td>{{ p.category }}</td>
+            <td>{{ p.price }}</td>
+            <td>{{ p.upc }}</td>
+            <td>{{ p.epc }}</td>
+            <td>{{ p.stock_quantity }}</td>
+            <td>
+                <form method="POST" style="display:inline">
+                    {% csrf_token %}
+                    <button type="submit" name="delete_product" value="{{ p.id }}">
+                        DELETE
+                    </button>
+                </form>
+            </td>
+        
+        </tr>
+
+        {% endfor %}
+    </table>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
