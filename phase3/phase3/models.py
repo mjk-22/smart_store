@@ -44,14 +44,22 @@ class InventoryReceived(models.Model):
     quantity_received = models.IntegerField()
 
 class Fridge(models.Model):
-    name = models.CharField(max_length=50)
-    topic = models.CharField(max_length=100)
-    temperature = models.FloatField(default=0)
-    humidity = models.FloatField(default=0)
-    temp_threshold = models.FloatField(default=0)
-    humidity_threshold = models.FloatField(default=0)
-    fan_on = models.BooleanField(default=False)
-    updated_at = models.DateTimeField(auto_now=True)
+
+    name = models.CharField(max_length=32,unique=True)
+    topic = models.CharField(max_length=32, unique=True)
+
+    temperature = models.FloatField(null=True, blank=True)
+    humidity = models.FloatField(null=True, blank=True)
+    updated_at= models.DateTimeField(auto_now=True)
+    fan_gpio = models.IntegerField(default=18)   
+    fan_on   = models.BooleanField(default=False)  
+    alert_email = models.EmailField(blank=True, null=True)  
+    last_alert_ts = models.DateTimeField(blank=True, null=True)
+
+
+    temp_threshold     = models.FloatField(default=21.0)   
+    humidity_threshold = models.FloatField(default=51.0)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.topic})"
+    

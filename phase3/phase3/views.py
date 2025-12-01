@@ -14,9 +14,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 import json
 from datetime import date
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 def default(request):
-    # this *is* your fridge dashboard now
     fridges = Fridge.objects.order_by("id")
     fridges_data = list(
         fridges.values(
@@ -37,22 +39,24 @@ def default(request):
     }
     return render(request, "dashboard.html", context)
 
+def fridge_latest(request):
+    fridges_out = []
+    for f in Fridge.objects.all().order_by("id"):
+        local_updated = timezone.localtime(f.updated_at)
+        fridges_out.append({
+            "id": f.id,
+            "name": f.name,
+            "topic": f.topic,
+            "temperature": f.temperature,
+            "humidity": f.humidity,
+            "temp_threshold": f.temp_threshold,
+            "humidity_threshold": f.humidity_threshold,
+            "fan_on": f.fan_on,
+            "updated_at": local_updated.strftime("%Y-%m-%d %H:%M:%S"),
+        })
+    return JsonResponse({"fridges": fridges_out})
 
-def get_latest_readings(request):
-    fridges = list(
-        Fridge.objects.values(
-            "id",
-            "name",
-            "topic",
-            "temperature",
-            "humidity",
-            "temp_threshold",
-            "humidity_threshold",
-            "fan_on",
-            "updated_at",
-        ).order_by("id")
-    )
-    return JsonResponse({"fridges": fridges})
+
 
 
 @csrf_exempt
@@ -195,7 +199,9 @@ def checkout(request):
         return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
 
     customer_id = request.session.get("customer_id")
-    if not customer_id:
+    guest_mode = request.session.get("guest_mode", False)
+
+    if not customer_id and not guest_mode:
         return JsonResponse({"success": False, "error": "Not logged in"}, status=403)
 
     try:
@@ -207,8 +213,8 @@ def checkout(request):
         if not cart:
             return JsonResponse({"success": False, "error": "Cart is empty"}, status=400)
 
-        customer = Customers.objects.get(id=customer_id)
         total_price = 0
+        cart_items = []
 
         with transaction.atomic():
             for product_id, item in cart.items():
@@ -219,26 +225,44 @@ def checkout(request):
                 product.save()
 
                 total_price += float(product.price) * quantity
+                cart_items.append((product, quantity))
 
-            points_earned = int(total_price // 10)
+            if customer_id:
+                customer = Customers.objects.get(id=customer_id)
+                points_earned = int(total_price // 10)
+            else:
+                customer, _ = Customers.objects.get_or_create(
+                    email="guest@smartstore.local",
+                    defaults={
+                        "name": "Guest",
+                        "phone_number": "0000000000",
+                        "password": "guest",
+                        "points": 0,
+                    },
+                )
+                points_earned = 0
+
             receipt = Receipts.objects.create(
                 customer_id=customer,
                 time=timezone.now(),
                 points_earned=points_earned,
                 total_price=total_price,
             )
+            if customer_id:
+                customer.points += points_earned
+                customer.save(update_fields=["points"])
 
-            customer.points += points_earned
-            customer.save(update_fields=["points"])
-
-            for product_id, item in cart.items():
-                product = Products.objects.get(id=product_id)
-                quantity = int(item["quantity"])
-                Receipts_Products.objects.create(
+            items_for_email = []
+            for product, quantity in cart_items:
+                rp = Receipts_Products.objects.create(
                     receipt_id=receipt,
                     product_id=product,
                     product_quantity=quantity,
                 )
+                items_for_email.append(rp)
+
+        if customer_id and customer.email:
+            send_receipt_email(customer, receipt, items_for_email)
 
         return JsonResponse({
             "success": True,
@@ -247,6 +271,7 @@ def checkout(request):
     except Exception as e:
         print("Checkout error:", e)
         return JsonResponse({"success": False, "error": "Checkout failed"}, status=500)
+
     
 
 def product_management_home(request):
@@ -256,33 +281,61 @@ def self_checkout_home(request):
     return render(request, "self_checkout_home.html")
 
 def self_checkout_login(request):
-    login_form = LoginForm()
-    register_form = CustomerForm()
-
     if request.method == "POST":
-        if "login" in request.POST:
-            login_form = LoginForm(request.POST)
-            if login_form.is_valid():
-                email = login_form.cleaned_data["email"]
-                password = login_form.cleaned_data["password"]
-                customer = Customers.objects.filter(email=email, password=password).first()
-                if customer:
-                    request.session["customer_id"] = customer.id
-                    return redirect("self_checkout_cart")
-                else:
-                    login_form.add_error(None, "Invalid email or password.")
-        elif "register" in request.POST:
-            register_form = CustomerForm(request.POST)
-            if register_form.is_valid():
-                customer = register_form.save()
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+
+            try:
+                customer = Customers.objects.get(email=email, password=password)
                 request.session["customer_id"] = customer.id
+                request.session["guest_mode"] = False
+                messages.success(request, "Logged in for self checkout.")
                 return redirect("self_checkout_cart")
+            except Customers.DoesNotExist:
+                messages.error(request, "Invalid email or password.")
+    else:
+        form = LoginForm()
+
+    return render(request, "self_checkout_login.html", {"login_form": form})
+
+
+def self_checkout_register(request):
+    if request.method == "POST":
+        form = CustomerForm(request.POST)
+        if form.is_valid():
+            customer = form.save()
+            request.session["customer_id"] = customer.id
+            request.session["guest_mode"] = False
+            messages.success(request, "Account created. You can start scanning items.")
+            return redirect("self_checkout_cart")
+    else:
+        form = CustomerForm()
+
+    return render(request, "self_checkout_register.html", {"register_form": form})
+
+
+def self_checkout_guest(request):
+    request.session.pop("customer_id", None)
+    request.session["guest_mode"] = True
+    messages.info(request, "You are using self checkout as a guest.")
+    return redirect("self_checkout_cart_guest")
+
+def self_checkout_cart_guest(request):
+    guest_mode = request.session.get("guest_mode", False)
+
+    if not guest_mode:
+        return redirect("self_checkout_login")
+
+    products = Products.objects.all()
 
     context = {
-        "login_form": login_form,
-        "register_form": register_form,
+        "products": products,
+        "guest_mode": True,
     }
-    return render(request, "self_checkout_login.html", context)
+    return render(request, "self_checkout_cart_guest.html", context)
+
 
 def checkout_logout(request):
     logout(request)
@@ -291,10 +344,11 @@ def checkout_logout(request):
 
 def self_checkout_cart(request):
     customer_id = request.session.get("customer_id")
-    if not customer_id:
+    guest_mode = request.session.get("guest_mode", False)
+    if not customer_id and not guest_mode:
         return redirect("self_checkout_login")
 
-    customer = get_object_or_404(Customers, id=customer_id)
+    customer = get_object_or_404(Customers, id=customer_id) if customer_id else None
     products = Products.objects.all().order_by("name")
     receipts = Receipts.objects.filter(customer_id=customer).order_by("-time")
 
@@ -441,7 +495,7 @@ def inventory_report(request):
 
 def activity_report(request):
 
-    form = SalesReportsFiltersForm(request.GET or None)
+    form = DateRangeForm(request.GET)
 
     start_date_str = form["start_date"].value() or "2025-11-01"
     end_date_str = form["end_date"].value() or str(date.today())
@@ -485,7 +539,7 @@ def customer_receipt_history(request):
 
     customer = get_object_or_404(Customers, id=customer_id)
 
-    # --- Date Range Filter ---
+    # Date Range Filter 
     receipts = Receipts.objects.filter(customer_id=customer).order_by("-time")
     form = DateRangeForm(request.GET)
 
@@ -499,7 +553,7 @@ def customer_receipt_history(request):
 
     total_spent = receipts.aggregate(sum=Sum("total_price"))["sum"] or 0
 
-    # --- Item Search Filter ---
+    # Item Search Filter 
     search_form = PurchaseSearchForm(request.GET)
     info = None
 
@@ -525,3 +579,41 @@ def customer_receipt_history(request):
         "info": info,
         "total_spent": total_spent,
     })
+
+
+
+def send_receipt_email(customer, receipt, items):
+    if not customer.email:
+        return  # no email, nothing to do
+
+    subject = f"Your Smart Store receipt #{receipt.id}"
+    from_email = settings.DEFAULT_FROM_EMAIL
+    to = [customer.email]
+
+    context = {
+        "customer": customer,
+        "receipt": receipt,
+        "items": items,
+    }
+
+    # plain text + HTML versions
+    text_body = render_to_string("receipt_email.txt", context)
+    html_body = render_to_string("receipt_email.html", context)
+
+    msg = EmailMultiAlternatives(subject, text_body, from_email, to)
+    msg.attach_alternative(html_body, "text/html")
+    msg.send()
+
+
+def resend_receipt_email_view(request, receipt_id):
+  
+    receipt = get_object_or_404(Receipts, id=receipt_id)
+    customer = receipt.customer_id
+    items = Receipts_Products.objects.filter(
+        receipt_id=receipt
+    ).select_related("product_id")
+
+    send_receipt_email(customer, receipt, items)
+
+    messages.success(request, "Receipt emailed again to your registered address.")
+    return redirect("receipt_detail", receipt_id=receipt.id)

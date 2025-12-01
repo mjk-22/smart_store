@@ -78,6 +78,21 @@ body {
     border-color: #2563eb;
 }
 
+.btn-history {
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid #4b5563;
+    font-size: 14px;
+    color: #e5e7eb;
+    background: #2563eb;
+    margin-top:  24px;
+    border-color: #2563eb;
+     
+
+}
+
+
 .management-tabs {
     display: flex;
     flex-direction:column;
@@ -247,54 +262,118 @@ hr {
     border-left: 4px solid #ef4444;
 }
 
-
-.fridge-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
+.fridge-dashboard > h2 {
+    margin-bottom: 4px;
 }
 
-.fridge-card {
-  border-radius: 16px;
-  padding: 16px;
-  background: rgba(15, 23, 42, 0.85);
-  color: #e5e7eb;
+.fridge-dashboard .muted {
+    color: #9ca3af;
+    font-size: 14px;
+    margin-bottom: 16px;
 }
 
-.fridge-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
+.gauge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 20px;
 }
 
-.fridge-readings p {
-  margin: 4px 0;
+.gauge-card {
+    border-radius: 18px;
+    padding: 16px 20px;
+    background: radial-gradient(circle at top left, #0ea5e9 0, #0f172a 40%, #020617 90%);
+    color: #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.fridge-readings .updated {
-  font-size: 12px;
-  color: #9ca3af;
+.gauge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.gauge-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 20px;
+}
+
+.gauge-panel {
+    text-align: center;
+}
+
+.gauge-panel canvas {
+    display: block;
+    width: 100%;
+    height: 180px;
+    margin: 8px 0 4px 0;
+}
+
+.gauge-value {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.gauge-label {
+    font-size: 13px;
+    color: #9ca3af;
+}
+
+.gauge-scale {
+    font-size: 11px;
+    color: #6b7280;
+    margin-top: 2px;
 }
 
 .threshold-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
 }
 
 .threshold-form label {
-  display: flex;
-  flex-direction: column;
-  font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
 }
 
 .threshold-form input {
-  margin-top: 4px;
+    margin-top: 4px;
 }
 
-.fan-form {
-  margin-top: 10px;
-  text-align: right;
+.gauge-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.gauge-footer .updated {
+    color: #9ca3af;
+}
+
+.pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(148, 163, 184, 0.7);
+    font-size: 11px;
+}
+
+.pill-on {
+    background: rgba(34, 197, 94, 0.16); /* green-ish */
+    border-color: #22c55e;
+}
+
+.pill-off {
+    background: rgba(148, 163, 184, 0.15);
+    border-color: rgba(148, 163, 184, 0.7);
 }

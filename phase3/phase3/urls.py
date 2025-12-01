@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # API endpoints for dashboard JS
-    path("fridges/latest/", views.get_latest_readings, name="fridge_latest"),
+    path("fridges/latest/", views.fridge_latest, name="fridge_latest"),
     path("fridges/<int:pk>/thresholds/", views.update_thresholds, name="fridge_thresholds"),
     path("fridges/<int:pk>/fan-toggle/", views.fan_toggle, name="fridge_fan_toggle"),
 
@@ -42,7 +42,10 @@ urlpatterns = [
     # Self-checkout system
     path('self-checkout/', views.self_checkout_home, name='self_checkout_home'),
     path('self-checkout/login/', views.self_checkout_login, name='self_checkout_login'),
+    path("self-checkout/register/", views.self_checkout_register, name="self_checkout_register"),
+    path("self-checkout/guest/", views.self_checkout_guest, name="self_checkout_guest"),
     path('self-checkout/cart/', views.self_checkout_cart, name='self_checkout_cart'),
+    path("self-checkout/cart/guest/", views.self_checkout_cart_guest, name="self_checkout_cart_guest"),
     path('account/', views.customer_account, name='customer_account'),
     path('receipt/<int:receipt_id>/', views.receipt_detail, name='receipt_detail'),
     path('checkout/', views.checkout, name='checkout_api'),
@@ -53,8 +56,7 @@ urlpatterns = [
     path('sales-report/', views.sales_report, name='sales_report'),
     path('inventory-reports/', views.inventory_report, name='inventory_report'),
     path('activity-report/', views.activity_report, name='activity_report'),
-    #path('customer-portal/', views.customer_portal, name='customer_portal'),
     path("customer/history/", views.customer_receipt_history, name="customer_receipt_history"),
-    #path("customer/search/", views.customer_purchase_search, name="customer_purchase_search"),
+    path('receipt/<int:receipt_id>/resend/', views.resend_receipt_email_view, name='resend_receipt_email'),
 
 ]

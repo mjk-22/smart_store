@@ -26,5 +26,8 @@
         <tr><td colspan="3">No purchases yet.</td></tr>
         {% endfor %}
     </table>
+
+    <a class="btn-history" href="{% url 'customer_receipt_history' %}">Purchase history report</a>
+
 </section>
 {% endblock %}

@@ -3,7 +3,7 @@ from pathlib import Path
 import paho.mqtt.client as mqtt
 
 BASE_DIR = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(BASE_DIR))
+sys.path.insert(0, str(BASE_DIR / "phase3"))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "phase3.settings")
 django.setup()
 

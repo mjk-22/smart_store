@@ -47,14 +47,9 @@
                 </form>
             </div>
 
-            <!-- <h3>Products</h3> -->
             <table>
                 <tr>
-                    <!-- <th>Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th></th> -->
+                
                 </tr>
                 {% for p in products %}
                 <tr data-product-id="{{ p.id }}"
@@ -63,15 +58,7 @@
                     data-stock="{{ p.stock_quantity }}"
                     data-barcode="{{ p.upc }}"
                     data-rfid="{{ p.epc }}">
-                    <!-- <td>{{ p.name }}</td>
-                    <td>{{ p.category }}</td>
-                    <td>{{ p.price }}</td>
-                    <td>{{ p.stock_quantity }}</td>
-                    <td>
-                        <button onclick="addToCart('{{ p.id }}', '{{ p.name }}', '{{ p.price }}', '{{ p.stock_quantity }}')">
-                            Add to cart
-                        </button>
-                    </td> -->
+                   
                 </tr>
                 {% endfor %}
             </table>

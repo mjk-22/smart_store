@@ -3,7 +3,7 @@ from pathlib import Path
 import paho.mqtt.client as mqtt
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str((PROJECT_ROOT)))
+sys.path.insert(0, str((PROJECT_ROOT/"phase3")))
 # sys.path.insert(0, str((PROJECT_ROOT / "phase3").resolve()))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "phase3.settings")
 
@@ -18,7 +18,7 @@ BROKER = "localhost"
 PORT = 1883
 TOPICS = ["frig1", "frig2"]
 
-DEFAULT_ALERT_TO = "email address that receive alert"
+DEFAULT_ALERT_TO = "manal.jkini@gmail.com"
 ALERT_COOLDOWN_SEC = 60
 AUTO_OFF_HYST = 0.5
 
@@ -80,7 +80,7 @@ def on_message(client, userdata, msg):
                 send_alert(to_addr, f.id, f.name, f.topic, t)
                 f.last_alert_ts = timezone.now()
                 f.save(update_fields=["last_alert_ts"])
-                print(f"[email] sent to {to_addr}")S
+                print(f"[email] sent to {to_addr}")
             except Exception as e:
                 print("[email] FAILED:", e)
         else:

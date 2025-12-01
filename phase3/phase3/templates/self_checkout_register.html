@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card" style="max-width:480px; margin:0 auto;">
+    <h2>Create self-checkout account</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ register_form.as_p }}
+        <button type="submit" class="btn" name="register">Create account</button>
+    </form>
+
+    <hr>
+
+    <p>Already have an account?</p>
+    <a class="btn" href="{% url 'self_checkout_login' %}">Back to login</a>
+</section>
+{% endblock %}

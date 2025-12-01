@@ -40,6 +40,9 @@
     <a class="btn-checkout" href="{% url 'checkout_logout' %}">
     Log out
 </a>
+ <a class="btn-checkout" href="{% url 'resend_receipt_email' receipt.id %}">
+        Email me this receipt again
+    </a>
     <button class="btn secondary" onclick="history.back()">Keep Browsing</button>
 
 </section>
