@@ -1,20 +1,20 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block content %}
 <section class="card">
-    <h2>My Account</h2>
+    <h2>{% trans "My Account" %} </h2>
 
-    <p><strong>Name:</strong> {{ customer.name }}</p>
-    <p><strong>Email:</strong> {{ customer.email }}</p>
-    <p><strong>Membership #:</strong> {{ customer.membership_id }}</p>
+    <p><strong>{% trans "Name" %} :</strong> {{ customer.name }}</p>
+    <p><strong>{% trans "Email" %}Email:</strong> {{ customer.email }}</p>
+    <p><strong>{% trans "Membership" %}Membership #:</strong> {{ customer.membership_id }}</p>
     <p><strong>Total points:</strong> {{ customer.points }}</p>
 
-    <h3>Purchase History</h3>
+    <h3>{% trans "Purchase History" %} </h3>
     <table>
         <tr>
-            <th>Date</th>
-            <th>Total</th>
-            <th>Points</th>
+            <th>{% trans "Date" %} </th>
+            <th>{% trans "Total" %}Total</th>
+            <th>{% trans "Points" %}Points</th>
         </tr>
         {% for r in receipts %}
         <tr>
@@ -23,8 +23,11 @@
             <td>{{ r.points_earned }}</td>
         </tr>
         {% empty %}
-        <tr><td colspan="3">No purchases yet.</td></tr>
+        <tr><td colspan="3">{% trans "No purchases yet." %} </td></tr>
         {% endfor %}
     </table>
+
+    <a class="btn-history" href="{% url 'customer_receipt_history' %}">{% trans "Purchase history report" %} </a>
+
 </section>
 {% endblock %}

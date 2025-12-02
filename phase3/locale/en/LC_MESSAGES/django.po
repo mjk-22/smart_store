@@ -1,0 +1,392 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: fr\n"
+
+# ---------------------------
+# AUTH / LOGIN / REGISTER
+# ---------------------------
+
+msgid "Back to login"
+msgstr ""
+
+msgid "Create account"
+msgstr ""
+
+msgid "I already have an account"
+msgstr ""
+
+msgid "Log in"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+msgid "Create an account"
+msgstr ""
+
+msgid "Continue as guest"
+msgstr ""
+
+# ---------------------------
+# SELF CHECKOUT HOME
+# ---------------------------
+
+msgid "Smart Store - Self Checkout"
+msgstr ""
+
+msgid "Scan your items, proceed to checkout , and earn loyalty points."
+msgstr ""
+
+# ---------------------------
+# SELF CHECKOUT CART / GUEST
+# ---------------------------
+
+msgid "Self Checkout - Scan & Pay"
+msgstr ""
+
+msgid "You are checking out as a guest. No account, no points, no email receipt."
+msgstr ""
+
+msgid "Scan barcode / RFID:"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Cart"
+msgstr ""
+
+# ---------------------------
+# ACCOUNT INFO
+# ---------------------------
+
+msgid "Account"
+msgstr ""
+
+msgid "ID:"
+msgstr ""
+
+msgid "Name:"
+msgstr ""
+
+msgid "Email:"
+msgstr ""
+
+msgid "Membership #:"
+msgstr ""
+
+msgid "Total points:"
+msgstr ""
+
+msgid "Recent Purchases:"
+msgstr ""
+
+msgid "Date:"
+msgstr ""
+
+msgid "Total:"
+msgstr ""
+
+msgid "Points:"
+msgstr ""
+
+msgid "No purchases yet."
+msgstr ""
+
+# ---------------------------
+# SALES REPORT
+# ---------------------------
+
+msgid "Sales Report"
+msgstr ""
+
+msgid "Apply Filters"
+msgstr ""
+
+msgid "Total Revenue"
+msgstr ""
+
+msgid "Highest Selling Product(s)"
+msgstr ""
+
+msgid "Lowest Selling Product(s)"
+msgstr ""
+
+msgid "Sales Breakdown"
+msgstr ""
+
+msgid "Product"
+msgstr ""
+
+msgid "Quantity Sold"
+msgstr ""
+
+msgid "Revenue "
+msgstr ""
+
+msgid "No products found."
+msgstr ""
+
+# ---------------------------
+# RECEIPTS LIST (ADMIN)
+# ---------------------------
+
+msgid "Receipts"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Customer"
+msgstr ""
+
+msgid "Points Earned"
+msgstr ""
+
+msgid "Smart Store - Receipt"
+msgstr ""
+
+msgid "Customer:"
+msgstr ""
+
+msgid "Membership #:"
+msgstr ""
+
+msgid "Item"
+msgstr ""
+
+msgid "Qty"
+msgstr ""
+
+msgid "Price"
+msgstr ""
+
+msgid "Points earned:"
+msgstr ""
+
+msgid "Thank you for shopping at Smart Store!"
+msgstr ""
+
+msgid "Points earned"
+msgstr ""
+
+msgid "Payment done - thank you for shopping at Smart Store!"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Email me this receipt again"
+msgstr ""
+
+msgid "Keep Browsing"
+msgstr ""
+
+msgid "Receipt"
+msgstr ""
+
+msgid "Membership"
+msgstr ""
+
+msgid "Back to all receipts"
+msgstr ""
+
+# ---------------------------
+# PRODUCTS PAGE
+# ---------------------------
+
+msgid "Products"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Category"
+msgstr ""
+
+msgid "UPC"
+msgstr ""
+
+msgid "EPC"
+msgstr ""
+
+msgid "Stock"
+msgstr ""
+
+msgid "DELETE"
+msgstr ""
+
+msgid "Product & Inventory Management"
+msgstr ""
+
+msgid "Use these tools to manage products, customers, and stock."
+msgstr ""
+
+msgid "Create Product"
+msgstr ""
+
+msgid "Add Inventory"
+msgstr ""
+
+msgid "Products List (with total stock)"
+msgstr ""
+
+msgid "Inventory Receipts"
+msgstr ""
+
+msgid "Customers"
+msgstr ""
+
+msgid "All Receipts (admin view)"
+msgstr ""
+
+msgid "Inventory Report"
+msgstr ""
+
+msgid "Qty Received (period)"
+msgstr ""
+
+msgid "Current Stock"
+msgstr ""
+
+msgid "No products found for this period / filter."
+msgstr ""
+
+# ---------------------------
+# INVENTORY TABLE
+# ---------------------------
+
+msgid "Inventory"
+msgstr ""
+
+msgid "Date Received"
+msgstr ""
+
+msgid "Quantity"
+msgstr ""
+
+# ---------------------------
+# FRIDGE DASHBOARD
+# ---------------------------
+
+msgid "Fan"
+msgstr ""
+
+msgid "Temp"
+msgstr ""
+
+msgid "Scale"
+msgstr ""
+
+msgid "Humidity"
+msgstr ""
+
+msgid "Temp threshold"
+msgstr ""
+
+msgid "Humidity threshold"
+msgstr ""
+
+msgid "Save thresholds"
+msgstr ""
+
+msgid "Last update"
+msgstr ""
+
+msgid "No fridges configured yet."
+msgstr ""
+
+# ---------------------------
+# CUSTOMERS PAGE
+# ---------------------------
+
+msgid "Points"
+msgstr ""
+
+msgid "Filter by Date"
+msgstr ""
+
+msgid "Apply Filter"
+msgstr ""
+
+msgid "Total Spent"
+msgstr ""
+
+msgid "No receipts found for this period."
+msgstr ""
+
+# ---------------------------
+# SEARCH PAGE
+# ---------------------------
+
+msgid "Search Purchase History"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Purchased"
+msgstr ""
+
+msgid "Quantity"
+msgstr ""
+
+# ---------------------------
+# CUSTOMER ACCOUNT
+# ---------------------------
+
+msgid "My Account"
+msgstr ""
+
+msgid "Purchase History"
+msgstr ""
+
+msgid "Purchase history report"
+msgstr ""
+
+msgid "Add Product"
+msgstr ""
+
+msgid "Add Customer"
+msgstr ""
+
+# ---------------------------
+# NAVIGATION / BASE
+# ---------------------------
+
+msgid "Smart Store"
+msgstr ""
+
+msgid "Smart Store Admin Page"
+msgstr ""
+
+msgid "Dashboard"
+msgstr ""
+
+msgid "Product Management"
+msgstr ""
+
+msgid "Self Checkout"
+msgstr ""
+
+msgid "Admin Reports"
+msgstr ""
+
+msgid "Use these tools to manage Stock and Inventory reports."
+msgstr ""
+
+msgid "Inventory Reports"
+msgstr ""
+
+msgid "Customer Activity Report"
+msgstr ""
+
+msgid "Total Customers"
+msgstr ""
+
+msgid "New Customers"
+msgstr ""
+
+msgid "Returning Customers"
+msgstr ""

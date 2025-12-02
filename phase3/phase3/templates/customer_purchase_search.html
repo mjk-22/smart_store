@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<section class="card">
+    <h2>{% trans "Search Purchase History" %}</h2>
+
+    <!-- Search Form -->
+    <form method="GET" class="filter-form">
+        {{ form.as_p }}
+        <button type="submit">{% trans "Search" %}</button>
+    </form>
+
+    {% if info %}
+        <h3>
+            {% blocktrans with name=info.item_name %}
+                Item: {{ name }}
+            {% endblocktrans %}
+        </h3>
+
+        <p>
+            {% blocktrans with count=info.count %}
+                <strong>Purchased:</strong> {{ count }} times
+            {% endblocktrans %}
+        </p>
+
+        <table>
+            <tr>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Price" %}</th>
+                <th>{% trans "Quantity" %}</th>
+            </tr>
+
+            {% for it in info.items %}
+            <tr>
+                <td>{{ it.receipt_id.time }}</td>
+                <td>${{ it.product_id.price }}</td>
+                <td>{{ it.product_quantity }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+</section>
+{% endblock %}

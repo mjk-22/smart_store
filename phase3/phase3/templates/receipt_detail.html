@@ -1,19 +1,19 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block content %}
 <section class="card" style="max-width:600px;margin:0 auto;">
-    <h2>Smart Store - Receipt</h2>
-    <p><strong>Customer:</strong> {{ customer.name }}</p>
-    <p><strong>Membership #:</strong> {{ customer.membership_id }}</p>
-    <p><strong>Date:</strong> {{ receipt.time }}</p>
+    <h2>{% trans "Smart Store - Receipt" %} </h2>
+    <p><strong>{% trans "Customer" %} :</strong> {{ customer.name }}</p>
+    <p><strong>{% trans "Membership" %}  #:</strong> {{ customer.membership_id }}</p>
+    <p><strong>{% trans "Date" %} :</strong> {{ receipt.time }}</p>
 
     <hr>
 
     <table>
         <tr>
-            <th>Item</th>
-            <th style="text-align:center;">Qty</th>
-            <th style="text-align:right;">Price</th>
+            <th>{% trans "Item" %} </th>
+            <th style="text-align:center;">{% trans "Qty" %} </th>
+            <th style="text-align:right;">{% trans "Price" %} </th>
         </tr>
         {% for item in items %}
         <tr>
@@ -28,17 +28,22 @@
 
     <hr>
 
-    <p><strong>Points earned:</strong> {{ receipt.points_earned }}</p>
+    <p><strong>{% trans "Points earned" %} :</strong> {{ receipt.points_earned }}</p>
     <p style="text-align:right; font-size:18px;">
-        <strong>Total:</strong> {{ receipt.total_price|floatformat:2 }}
+        <strong>{% trans "Total" %} :</strong> {{ receipt.total_price|floatformat:2 }}
     </p>
 
     <p style="font-size:13px; color:#6b7280;">
-        Payment done - thank you for shopping at Smart Store!
+        {% trans "Payment done - thank you for shopping at Smart Store!" %} 
     </p>
 
     <a class="btn-checkout" href="{% url 'checkout_logout' %}">
-    Log out
+    {% trans "Log out" %} 
 </a>
+ <a class="btn-checkout" href="{% url 'resend_receipt_email' receipt.id %}">
+        {% trans "Email me this receipt again" %} 
+    </a>
+    <button class="btn secondary" onclick="history.back()">{% trans "Keep Browsing" %} </button>
+
 </section>
 {% endblock %}

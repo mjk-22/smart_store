@@ -1,0 +1,392 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: fr\n"
+
+# ---------------------------
+# AUTH / LOGIN / REGISTER
+# ---------------------------
+
+msgid "Back to login"
+msgstr "Retour à la connexion"
+
+msgid "Create account"
+msgstr "Créer un compte"
+
+msgid "I already have an account"
+msgstr "J’ai déjà un compte"
+
+msgid "Log in"
+msgstr "Se connecter"
+
+msgid "Start"
+msgstr "Commencer"
+
+msgid "Create an account"
+msgstr "Créer un compte"
+
+msgid "Continue as guest"
+msgstr "Continuer en tant qu’invité"
+
+# ---------------------------
+# SELF CHECKOUT HOME
+# ---------------------------
+
+msgid "Smart Store - Self Checkout"
+msgstr "Smart Store - Caisse libre-service"
+
+msgid "Scan your items, proceed to checkout , and earn loyalty points."
+msgstr "Scannez vos articles, passez en caisse et gagnez des points de fidélité."
+
+# ---------------------------
+# SELF CHECKOUT CART / GUEST
+# ---------------------------
+
+msgid "Self Checkout - Scan & Pay"
+msgstr "Caisse libre-service - Scanner & Payer"
+
+msgid "You are checking out as a guest. No account, no points, no email receipt."
+msgstr "Vous passez en caisse en tant qu’invité. Pas de compte, pas de points, pas de reçu par courriel."
+
+msgid "Scan barcode / RFID:"
+msgstr "Scanner le code-barres / RFID :"
+
+msgid "Add"
+msgstr "Ajouter"
+
+msgid "Cart"
+msgstr "Panier"
+
+# ---------------------------
+# ACCOUNT INFO
+# ---------------------------
+
+msgid "Account"
+msgstr "Compte"
+
+msgid "ID:"
+msgstr "ID :"
+
+msgid "Name:"
+msgstr "Nom :"
+
+msgid "Email:"
+msgstr "Courriel :"
+
+msgid "Membership #:"
+msgstr "Numéro d’adhésion :"
+
+msgid "Total points:"
+msgstr "Total de points :"
+
+msgid "Recent Purchases:"
+msgstr "Achats récents :"
+
+msgid "Date:"
+msgstr "Date :"
+
+msgid "Total:"
+msgstr "Total :"
+
+msgid "Points:"
+msgstr "Points :"
+
+msgid "No purchases yet."
+msgstr "Aucun achat pour l’instant."
+
+# ---------------------------
+# SALES REPORT
+# ---------------------------
+
+msgid "Sales Report"
+msgstr "Rapport des ventes"
+
+msgid "Apply Filters"
+msgstr "Appliquer les filtres"
+
+msgid "Total Revenue"
+msgstr "Revenu total"
+
+msgid "Highest Selling Product(s)"
+msgstr "Produits les plus vendus"
+
+msgid "Lowest Selling Product(s)"
+msgstr "Produits les moins vendus"
+
+msgid "Sales Breakdown"
+msgstr "Détail des ventes"
+
+msgid "Product"
+msgstr "Produit"
+
+msgid "Quantity Sold"
+msgstr "Quantité vendue"
+
+msgid "Revenue "
+msgstr "Revenu "
+
+msgid "No products found."
+msgstr "Aucun produit trouvé."
+
+# ---------------------------
+# RECEIPTS LIST (ADMIN)
+# ---------------------------
+
+msgid "Receipts"
+msgstr "Reçus"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Customer"
+msgstr "Client"
+
+msgid "Points Earned"
+msgstr "Points gagnés"
+
+msgid "Smart Store - Receipt"
+msgstr "Smart Store - Reçu"
+
+msgid "Customer:"
+msgstr "Client :"
+
+msgid "Membership #:"
+msgstr "Numéro d’adhésion :"
+
+msgid "Item"
+msgstr "Article"
+
+msgid "Qty"
+msgstr "Qté"
+
+msgid "Price"
+msgstr "Prix"
+
+msgid "Points earned:"
+msgstr "Points gagnés :"
+
+msgid "Thank you for shopping at Smart Store!"
+msgstr "Merci d’avoir magasiné chez Smart Store !"
+
+msgid "Points earned"
+msgstr "Points gagnés"
+
+msgid "Payment done - thank you for shopping at Smart Store!"
+msgstr "Paiement effectué - merci d’avoir magasiné chez Smart Store !"
+
+msgid "Log out"
+msgstr "Se déconnecter"
+
+msgid "Email me this receipt again"
+msgstr "M’envoyer ce reçu de nouveau par courriel"
+
+msgid "Keep Browsing"
+msgstr "Continuer vos achats"
+
+msgid "Receipt"
+msgstr "Reçu"
+
+msgid "Membership"
+msgstr "Adhésion"
+
+msgid "Back to all receipts"
+msgstr "Retour à tous les reçus"
+
+# ---------------------------
+# PRODUCTS PAGE
+# ---------------------------
+
+msgid "Products"
+msgstr "Produits"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Category"
+msgstr "Catégorie"
+
+msgid "UPC"
+msgstr "UPC"
+
+msgid "EPC"
+msgstr "EPC"
+
+msgid "Stock"
+msgstr "Stock"
+
+msgid "DELETE"
+msgstr "SUPPRIMER"
+
+msgid "Product & Inventory Management"
+msgstr "Gestion des produits et de l’inventaire"
+
+msgid "Use these tools to manage products, customers, and stock."
+msgstr "Utilisez ces outils pour gérer les produits, les clients et le stock."
+
+msgid "Create Product"
+msgstr "Créer un produit"
+
+msgid "Add Inventory"
+msgstr "Ajouter de l’inventaire"
+
+msgid "Products List (with total stock)"
+msgstr "Liste des produits (avec stock total)"
+
+msgid "Inventory Receipts"
+msgstr "Réceptions de stock"
+
+msgid "Customers"
+msgstr "Clients"
+
+msgid "All Receipts (admin view)"
+msgstr "Tous les reçus (vue administrateur)"
+
+msgid "Inventory Report"
+msgstr "Rapport d’inventaire"
+
+msgid "Qty Received (period)"
+msgstr "Qté reçue (période)"
+
+msgid "Current Stock"
+msgstr "Stock actuel"
+
+msgid "No products found for this period / filter."
+msgstr "Aucun produit trouvé pour cette période ou ce filtre."
+
+# ---------------------------
+# INVENTORY TABLE
+# ---------------------------
+
+msgid "Inventory"
+msgstr "Inventaire"
+
+msgid "Date Received"
+msgstr "Date de réception"
+
+msgid "Quantity"
+msgstr "Quantité"
+
+# ---------------------------
+# FRIDGE DASHBOARD
+# ---------------------------
+
+msgid "Fan"
+msgstr "Ventilateur"
+
+msgid "Temp"
+msgstr "Température"
+
+msgid "Scale"
+msgstr "Échelle"
+
+msgid "Humidity"
+msgstr "Humidité"
+
+msgid "Temp threshold"
+msgstr "Seuil de température"
+
+msgid "Humidity threshold"
+msgstr "Seuil d’humidité"
+
+msgid "Save thresholds"
+msgstr "Enregistrer les seuils"
+
+msgid "Last update"
+msgstr "Dernière mise à jour"
+
+msgid "No fridges configured yet."
+msgstr "Aucun réfrigérateur configuré."
+
+# ---------------------------
+# CUSTOMERS PAGE
+# ---------------------------
+
+msgid "Points"
+msgstr "Points"
+
+msgid "Filter by Date"
+msgstr "Filtrer par date"
+
+msgid "Apply Filter"
+msgstr "Appliquer le filtre"
+
+msgid "Total Spent"
+msgstr "Total dépensé"
+
+msgid "No receipts found for this period."
+msgstr "Aucun reçu trouvé pour cette période."
+
+# ---------------------------
+# SEARCH PAGE
+# ---------------------------
+
+msgid "Search Purchase History"
+msgstr "Rechercher dans l’historique d’achats"
+
+msgid "Search"
+msgstr "Rechercher"
+
+msgid "Purchased"
+msgstr "Acheté"
+
+msgid "Quantity"
+msgstr "Quantité"
+
+# ---------------------------
+# CUSTOMER ACCOUNT
+# ---------------------------
+
+msgid "My Account"
+msgstr "Mon compte"
+
+msgid "Purchase History"
+msgstr "Historique des achats"
+
+msgid "Purchase history report"
+msgstr "Rapport de l’historique des achats"
+
+msgid "Add Product"
+msgstr "Ajouter un produit"
+
+msgid "Add Customer"
+msgstr "Ajouter un client"
+
+# ---------------------------
+# NAVIGATION / BASE
+# ---------------------------
+
+msgid "Smart Store"
+msgstr "Smart Store"
+
+msgid "Smart Store Admin Page"
+msgstr "Smart Store - Page d’administration"
+
+msgid "Dashboard"
+msgstr "Tableau de bord"
+
+msgid "Product Management"
+msgstr "Gestion des produits"
+
+msgid "Self Checkout"
+msgstr "Caisse libre-service"
+
+msgid "Admin Reports"
+msgstr "Rapports administratifs"
+
+msgid "Use these tools to manage Stock and Inventory reports."
+msgstr "Utilisez ces outils pour gérer les rapports de stock et d’inventaire."
+
+msgid "Inventory Reports"
+msgstr "Rapports d’inventaire"
+
+msgid "Customer Activity Report"
+msgstr "Rapport d’activité des clients"
+
+msgid "Total Customers"
+msgstr "Nombre total de clients"
+
+msgid "New Customers"
+msgstr "Nouveaux clients"
+
+msgid "Returning Customers"
+msgstr "Clients réguliers"

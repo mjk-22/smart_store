@@ -1,22 +1,26 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block content %}
 <section class="card">
-    <h1>Customer Activity Report</h1>
+    <h1>{% trans "Customer Activity Report" %} </h1>
 
     <form method="get" style="margin-bottom:20px;">
         {{ form.as_p }}
-        <button type="submit">Apply Filters</button>
+        <button type="submit">{% trans "Apply Filters" %}</button>
     </form>
 
-    <h2>Summary ({{ start_date }} → {{ end_date }})</h2>
+    <h2>
+        {% blocktrans with s=start_date e=end_date %}
+            Summary ({{ s }} -> {{ e }})
+        {% endblocktrans %}
+    </h2>
 
     <table cellpadding="6">
         <thead>
             <tr>
-                <th>Total Customers</th>
-                <th>New Customers</th>
-                <th>Returning Customers</th>
+                <th>{% trans "Total Customers" %} </th>
+                <th>{% trans "New Customers" %} </th>
+                <th>{% trans "Returning Customers" %} </th>
             </tr>
         </thead>
         <tbody>

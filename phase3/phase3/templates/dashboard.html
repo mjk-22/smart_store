@@ -1,65 +1,74 @@
 {% extends "base.html" %}
+{% load static i18n %}
 
 {% block content %}
 <section class="card">
   <h2>Smart Store - Fridge Dashboard</h2>
   <p>Live readings for all connected fridges.</p>
 
-  <div class="fridge-grid">
-    {% for f in fridges %}
-      <article class="fridge-card" data-fridge-id="{{ f.id }}">
-        <header class="fridge-header">
-          <h3>{{ f.name }}</h3>
-          <span class="pill" data-fan="{{ f.id }}">
-            {% if f.fan_on %}Fan: ON{% else %}Fan: OFF{% endif %}
-          </span>
-        </header>
+    <div class="gauge-grid">
+        {% for f in fridges %}
+        <article class="gauge-card" data-fridge-id="{{ f.id }}">
+            <header class="gauge-header">
+                <h3>{{ f.name }}</h3>
+                <span class="pill" data-fan="{{ f.id }}">
+                    {% trans "Fan" %} : {% if f.fan_on %}ON{% else %}OFF{% endif %} (auto)
+                </span>
+            </header>
 
-        <div class="fridge-readings">
-          <p>
-            <strong>Temperature:</strong>
-            <span data-temp="{{ f.id }}">{{ f.temperature }} °C</span>
-          </p>
-          <p>
-            <strong>Humidity:</strong>
-            <span data-hum="{{ f.id }}">{{ f.humidity }} %</span>
-          </p>
-          <p class="updated">
-            Last update:
-            <span data-updated="{{ f.id }}">{{ f.updated_at }}</span>
-          </p>
-        </div>
+            <div class="gauge-row">
+                <!-- Temperature gauge -->
+                <div class="gauge-panel">
+                    <div class="gauge-value">
+                        <span id="tempVal-{{ f.id }}">--</span> °C
+                    </div>
+                    <canvas id="tempGauge-{{ f.id }}"></canvas>
+                    <div class="gauge-label">{% trans "Temp" %} </div>
+                    <div class="gauge-scale">{% trans "Scale" %} : 0–40 °C</div>
+                </div>
 
-        <form class="threshold-form" method="post"
-              action="{% url 'fridge_thresholds' f.id %}">
-          {% csrf_token %}
-          <label>
-            Temp threshold (°C)
-            <input type="number" step="0.1" name="temp_threshold"
-                   value="{{ f.temp_threshold }}">
-          </label>
-          <label>
-            Humidity threshold (%)
-            <input type="number" step="0.1" name="humidity_threshold"
-                   value="{{ f.humidity_threshold }}">
-          </label>
-          <button class="btn small" type="submit">Save thresholds</button>
-        </form>
+                <!-- Humidity gauge -->
+                <div class="gauge-panel">
+                    <div class="gauge-value">
+                        <span id="humVal-{{ f.id }}">--</span> %
+                    </div>
+                    <canvas id="humGauge-{{ f.id }}"></canvas>
+                    <div class="gauge-label">{% trans "Humidity" %} </div>
+                    <div class="gauge-scale">{% trans "Scale" %} : 0–100 %</div>
+                </div>
+            </div>
 
-        <form class="fan-form" method="post"
-              action="{% url 'fridge_fan_toggle' f.id %}">
-          {% csrf_token %}
-          <input type="hidden" name="action"
-                 value="{% if f.fan_on %}OFF{% else %}ON{% endif %}">
-          <button class="btn secondary" type="submit">
-            {% if f.fan_on %}Turn fan OFF{% else %}Turn fan ON{% endif %}
-          </button>
-        </form>
-      </article>
-    {% empty %}
-      <p>No fridges configured yet.</p>
-    {% endfor %}
-  </div>
+            <footer class="gauge-footer">
+                <form class="threshold-form" method="post"
+                      action="{% url 'fridge_thresholds' f.id %}">
+                    {% csrf_token %}
+                    <label>
+                        {% trans "Temp threshold" %}  (°C)
+                        <input type="number" step="0.1"
+                               name="temp_threshold"
+                               value="{{ f.temp_threshold }}">
+                    </label>
+                    <label>
+                        {% trans "Humidity threshold" %}  (%)
+                        <input type="number" step="0.1"
+                               name="humidity_threshold"
+                               value="{{ f.humidity_threshold }}">
+                    </label>
+                    <button class="btn secondary small" type="submit">
+                        {% trans "Save thresholds" %} 
+                    </button>
+                </form>
+
+                <div class="updated">
+                    {% trans "Last update" %} :
+                    <span data-updated="{{ f.id }}">{{ f.updated_at }}</span>
+                </div>
+            </footer>
+        </article>
+        {% empty %}
+        <p>{% trans "No fridges configured yet." %} </p>
+        {% endfor %}
+    </div>
 </section>
 {% endblock %}
 

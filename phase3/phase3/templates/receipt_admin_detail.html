@@ -1,18 +1,18 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block content %}
 <section class="card" style="max-width:700px;margin:0 auto;">
-    <h2>Receipt #{{ receipt.id }}</h2>
+    <h2>{% trans "Receipt" %}  #{{ receipt.id }}</h2>
 
-    <p><strong>Customer:</strong> {{ receipt.customer_id.name }}</p>
-    <p><strong>Membership #:</strong> {{ receipt.customer_id.membership_id }}</p>
-    <p><strong>Date:</strong> {{ receipt.time }}</p>
+    <p><strong>{% trans "Customer" %} :</strong> {{ receipt.customer_id.name }}</p>
+    <p><strong>{% trans "Membership" %}  #:</strong> {{ receipt.customer_id.membership_id }}</p>
+    <p><strong>{% trans "Date" %} :</strong> {{ receipt.time }}</p>
 
     <hr>
 
     <table>
     <tr>
-        <th>Item</th>
+        <th>{% trans "Item" %} </th>
         <th style="text-align:center;">Qty</th>
         <th style="text-align:right;">Price</th>
     </tr>
@@ -29,13 +29,13 @@
 
     <hr>
 
-    <p><strong>Points earned:</strong> {{ receipt.points_earned }}</p>
+    <p><strong>{% trans "Points earned" %} :</strong> {{ receipt.points_earned }}</p>
     <p style="text-align:right; font-size:18px;">
-        <strong>Total:</strong> {{ receipt.total_price|floatformat:2 }}
+        <strong>{% trans "Total" %} :</strong> {{ receipt.total_price|floatformat:2 }}
     </p>
 
     <a class="btn checkout" href="{% url 'receipts_page' %}">
-        Back to all receipts
+        {% trans "Back to all receipts" %} 
     </a>
 </section>
 {% endblock %}

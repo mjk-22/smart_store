@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block content %}
 <section class="card">
-    <h2>Create Customer</h2>
+    <h2>{% trans "Create Customer" %} </h2>
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Add Customer</button>
+        <button type="submit">{% trans "Add Customer" %} </button>
     </form>
 </section>
 {% endblock %}

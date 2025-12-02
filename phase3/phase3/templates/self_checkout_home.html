@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block content %}
 <section class="card">
-    <h2>Smart Store - Self Checkout</h2>
-    <p>Scan your items, proceed to checkout , and earn loyalty points.</p>
+    <h2>{% trans "Smart Store - Self Checkout" %} </h2>
+    <p>{% trans "Scan your items, proceed to checkout , and earn loyalty points." %} </p>
     <a class="btn-start" href="{% url 'self_checkout_login' %}">
-        Start
+        {% trans "Start" %} 
     </a>
 </section>
 {% endblock %}

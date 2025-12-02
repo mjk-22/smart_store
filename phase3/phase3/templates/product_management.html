@@ -1,17 +1,17 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block content %}
 <section class="card">
-    <h2>Product & Inventory Management</h2>
-    <p>Use these tools to manage products, customers, and stock.</p>
+    <h2>{% trans "Product & Inventory Management" %} </h2>
+    <p>{% trans "Use these tools to manage products, customers, and stock." %} </p>
 
     <ul class="management-tabs">
-        <li><a href="{% url 'create_product_page' %}">Create Product</a></li>
-        <li><a href="{% url 'add_inventory_page' %}">Add Inventory</a></li>
-        <li><a href="{% url 'products_page' %}">Products List (with total stock)</a></li>
-        <li><a href="{% url 'inventory_page' %}">Inventory Receipts</a></li>
-        <li><a href="{% url 'customers_page' %}">Customers</a></li>
-        <li><a href="{% url 'receipts_page' %}">All Receipts (admin view)</a></li>
+        <li><a href="{% url 'create_product_page' %}">{% trans "Create Product" %} </a></li>
+        <li><a href="{% url 'add_inventory_page' %}">{% trans "Add Inventory" %} </a></li>
+        <li><a href="{% url 'products_page' %}">{% trans "Products List (with total stock)" %} </a></li>
+        <li><a href="{% url 'inventory_page' %}">{% trans "Inventory Receipts" %} </a></li>
+        <li><a href="{% url 'customers_page' %}">{% trans "Customers" %} </a></li>
+        <li><a href="{% url 'receipts_page' %}">{% trans "All Receipts (admin view)" %} </a></li>
     </ul>
 </section>
 {% endblock %}

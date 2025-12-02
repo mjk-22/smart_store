@@ -1,27 +1,24 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block content %}
-<section class="card">
-    <h2>Self Checkout - Account</h2>
+<section class="card" style="max-width:480px; margin:0 auto;">
+    <h2>{% trans "Self Checkout - Account" %}</h2>
 
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
-        <div>
-            <h3>I already have an account</h3>
-            <form method="POST">
-                {% csrf_token %}
-                {{ login_form.as_p }}
-                <button type="submit" name="login">Log in</button>
-            </form>
-        </div>
+    <h3>{% trans "I already have an account" %} </h3>
+    <form method="POST">
+        {% csrf_token %}
+        {{ login_form.as_p }}
+        <button type="submit" class="btn" name="login">{% trans "Log in" %} </button>
+    </form>
 
-        <div>
-            <h3>Create a new account</h3>
-            <form method="POST">
-                {% csrf_token %}
-                {{ register_form.as_p }}
-                <button type="submit" name="register">Create account</button>
-            </form>
-        </div>
-    </div>
+    <hr>
+
+    <p>{% trans "Start" %} Don't have an account?</p>
+    <a class="btn" href="{% url 'self_checkout_register' %}">{% trans "Create an account" %} </a>
+
+    <hr>
+
+    <p>{% trans "Start" %} Or continue without an account:</p>
+    <a class="btn" href="{% url 'self_checkout_guest' %}">{% trans "Continue as guest" %} </a>
 </section>
 {% endblock %}

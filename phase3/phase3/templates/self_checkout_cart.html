@@ -1,30 +1,30 @@
 
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
 {% block content %}
 <section class="card">
-    <h2>Self Checkout - Scan & Pay</h2>
+    <h2>{% trans "Self Checkout - Scan & Pay" %} </h2>
 
     <div style="display:grid; grid-template-columns:1fr 2fr; gap:24px;">
         <div>
-            <h3>Account</h3>
-            <p><strong>ID: </strong> {{ customer.id }}</p>
-            <p><strong>Name:</strong> {{ customer.name }}</p>
-            <p><strong>Email:</strong> {{ customer.email }}</p>
-            <p><strong>Membership #:</strong> {{ customer.membership_id }}</p>
-            <p><strong>Total points:</strong> {{ customer.points }}</p>
+            <h3>{% trans "Account" %} </h3>
+            <p><strong>{% trans "ID:" %} </strong> {{ customer.id }}</p>
+            <p><strong>{% trans "Name:" %} </strong> {{ customer.name }}</p>
+            <p><strong>{% trans "Email:" %} </strong> {{ customer.email }}</p>
+            <p><strong>{% trans "Membership #:" %} </strong> {{ customer.membership_id }}</p>
+            <p><strong>{% trans "Total points:" %} </strong> {{ customer.points }}</p>
 
             <p class="account">
                 <a href="{% url 'customer_account' %}">View full account & history</a>
             </p>
 
-            <h3>Recent Purchases</h3>
+            <h3>{% trans "Recent Purchases:" %} </h3>
             <table>
                 <tr>
-                    <th>Date</th>
-                    <th>Total</th>
-                    <th>Points</th>
+                    <th>{% trans "Date:" %} </th>
+                    <th>{% trans "Total:" %} </th>
+                    <th>{% trans "Points:" %} </th>
                 </tr>
                 {% for r in receipts|slice:":5" %}
                 <tr>
@@ -33,7 +33,7 @@
                     <td>{{ r.points_earned }}</td>
                 </tr>
                 {% empty %}
-                <tr><td colspan="3">No purchases yet.</td></tr>
+                <tr><td colspan="3">{% trans "No purchases yet.:" %} </td></tr>
                 {% endfor %}
             </table>
         </div>
@@ -41,9 +41,9 @@
         <div>
             <div class="scan-bar">
                 <form id="scan-form" onsubmit="handleScan(event)">
-                    <label for="scan-code">Scan barcode / RFID:</label>
+                    <label for="scan-code">{% trans "Scan barcode / RFID:" %} :</label>
                     <input id="scan-code" type="text" autocomplete="off" autofocus>
-                    <button type="submit">Add</button>
+                    <button type="submit">{% trans "Add:" %} </button>
                 </form>
             </div>
 
@@ -76,7 +76,7 @@
                 {% endfor %}
             </table>
 
-            <h3>Cart</h3>
+            <h3>{% trans "Cart:" %} </h3>
             <table id="cart-table">
             </table>
         </div>

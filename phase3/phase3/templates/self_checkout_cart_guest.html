@@ -1,0 +1,45 @@
+
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block content %}
+<section class="card">
+    <h2>{% trans "Self Checkout - Scan and Pay" %} </h2>
+
+    <p><em>{% trans "You are checking out as a guest. No account, no points, no email receipt." %} </em></p>
+
+    <div style="display:grid; grid-template-columns:1fr 2fr; gap:24px;">
+    
+        <div>
+            <div class="scan-bar">
+                <form id="scan-form" onsubmit="handleScan(event)">
+                    <label for="scan-code">{% trans "Scan barcode / RFID:" %} </label>
+                    <input id="scan-code" type="text" autocomplete="off" autofocus>
+                    <button type="submit">{% trans "Add" %} </button>
+                </form>
+            </div>
+
+            <table>
+                <tr></tr>
+                {% for p in products %}
+                <tr data-product-id="{{ p.id }}"
+                    data-name="{{ p.name }}"
+                    data-price="{{ p.price }}"
+                    data-stock="{{ p.stock_quantity }}"
+                    data-barcode="{{ p.upc }}"
+                    data-rfid="{{ p.epc }}">
+                </tr>
+                {% endfor %}
+            </table>
+
+            <h3>{% trans "Cart" %} </h3>
+            <table id="cart-table">
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
